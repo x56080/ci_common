@@ -1,0 +1,75 @@
+---
+- name: Copy and Install SequoiaDB Product
+  hosts: db_servers  # 指定目标主机或主机组
+  become: yes  # 使用sudo权限
+
+  vars:
+    install_path: "/opt/sequoiadds"
+    source_file_path: "/tmp"  # 设置本地源文件路径
+    remote_dest_path: "/tmp/"  # 设置远程目标路径
+    uninstall_required: yes  # 设置卸载是否需要执行的条件变量
+    required_arch: "aarch64"
+
+  tasks:
+    - name: Check host architecture
+      command: "arch"
+      register: host_arch
+      changed_when: false
+      check_mode: no
+
+    - name: Convert architecture name if necessary
+      set_fact:
+         required_arch: "{{ required_arch | default('x86_64') | regex_replace('^arm64$', 'aarch64') }}"
+
+    - name: Assert host architecture matches required architecture
+      assert:
+        that:
+          - host_arch.stdout == required_arch
+        fail_msg: "Host architecture does not match required architecture"
+        success_msg: "Host architecture matches required architecture"
+
+    - name: Check if SequoiaDB DDS is installed
+      stat:
+         path: "{{ install_path }}/uninstall"  # 替换为实际安装文件的路径
+      register: sequoiadds_installed
+      ignore_errors: yes
+
+    - name: Uninstall SequoiaDB DDS
+      command: "{{ install_path }}/uninstall --mode unattended"
+      become_user: root
+      when: uninstall_required and sequoiadds_installed.stat.exists | default(false)
+
+    - name: Find .run files
+      find:
+        paths: "{{source_file_path}}"
+        patterns: "*.run"
+      delegate_to: localhost
+      register: run_files
+      ignore_errors: yes
+  
+    - name: Check if .run files found in the directory
+      fail:
+        msg: "No .run files found in directory."
+      delegate_to: localhost
+      when: run_files.matched == 0
+
+    - name: Copy .run files to remote hosts
+      copy:
+        src: "{{ item.path }}"
+        dest: "{{ remote_dest_path }}"
+      with_items: "{{ run_files.files }}"
+      become_user: root
+
+    - name: Add execute permissions to .run files on remote hosts
+      file:
+        path: "{{remote_dest_path}}/{{ item.path | basename }}"
+        mode: '0755'
+      with_items: "{{ run_files.files }}"
+      become_user: root
+
+    - name: Execute .run files with parameters
+      command: "{{ remote_dest_path }}/{{ item.path | basename }} --mode unattended"
+      with_items: "{{ run_files.files }}"
+      become_user: root
+
+
