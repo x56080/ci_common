@@ -62,7 +62,7 @@ pipeline {
       stage("Generate Test Configuration"){
          steps{
             // 生成测试配置
-            sh 'cd misc/sequoiadds/script/cc/; ./gentestconf.sh --hostlist $hostlist --ccdir $WORKSPACE/ --conf $WORKSPACE/test/tools/python/conf/tools.ini'
+            sh 'cd misc/sequoiadds/script/tools/; ./gentestconf.sh --hostlist $hostlist --ccdir $WORKSPACE/ --conf $WORKSPACE/test/tools/python/conf/tools.ini'
          }
       }
       
