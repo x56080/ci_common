@@ -13,7 +13,6 @@ pipeline {
         string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.1.0', description: '')
         string(name: 'docker_user', defaultValue: 'liuyuchen', description: '')
         string(name: 'docker_passwd', defaultValue: 'liuyc_2021', description: '')
-        booleanParam(name: 'debug', defaultValue: false, description: '')
     }
 
     stages{
@@ -32,7 +31,6 @@ pipeline {
         }
 
         stage("build doc"){
-             when { expression { params.debug == 'false' }}
             agent{
                 docker{
                     image "${params.docker_image}"
