@@ -14,7 +14,7 @@ pipeline {
 
    parameters{
       string(name: 'test_rep', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-test.git', description: '')  
-      string(name: 'ci_rep', defaultValue: 'http://gitlab.sequoiadb.com/wangwenjing/ci_common.git', description: '')
+      string(name: 'ci_rep', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/ci/ci_common.git', description: '')
       string(name: 'testbranch', defaultValue: 'main', description: '')
       string(name: 'ccbranch', defaultValue: 'main', description: '')  
       booleanParam(name: 'is_notify', defaultValue: true, description: '')
