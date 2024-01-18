@@ -56,6 +56,10 @@ IFS=',' read -ra parts <<< "$hostlist"
 echo "[db_servers]" >>./inventory.ini
 for part in "${parts[@]}"; do
    echo "$part" >>./inventory.ini
+   grep -q $part ~/.ssh/known_hosts
+   if [ $? -ne 0 ];then
+      ssh-keyscan -H $part >> ~/.ssh/known_hosts
+   fi
 done
 
 
