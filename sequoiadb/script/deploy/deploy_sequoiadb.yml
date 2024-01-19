@@ -18,12 +18,12 @@
         msg: "sequoiadb not exists"
       when: sequoiadb_exists.stat.exists == false
 
-    - name: Copy the script to the remote host
-      copy:
-        src:  removelocaldeploy.sh 
-        dest: /tmp/removelocaldeploy.sh
-        mode: '0755'  # Ensure the script is executable
-      register: copy_result
+    #- name: Copy the script to the remote host
+    #  copy:
+    #    src:  removelocaldeploy.sh 
+    #    dest: /tmp/removelocaldeploy.sh
+    #    mode: '0755'  # Ensure the script is executable
+    #  register: copy_result
 
     - name: Execute remve local deploy
       script: /tmp/removelocaldeploy.sh
