@@ -26,7 +26,7 @@
     #  register: copy_result
 
     - name: Execute remve local deploy
-      script: /tmp/removelocaldeploy.sh
+      script: ./removelocaldeploy.sh
 
     - name: get install path
       shell: cat /etc/default/sequoiadb | grep INSTALL_DIR | awk -F "=" '{print $2}'
