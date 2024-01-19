@@ -1,0 +1,53 @@
+---
+- name: deploy sequoiadb
+  hosts: db_servers 
+  become: yes
+  #become_method: sudo
+  
+  tasks:
+    # 检查 /etc/default/sequoiadb文件是否存在，不存在则退出
+    - name: check if /etc/default/sequoiadb exists
+      stat:
+        path: /etc/default/sequoiadb
+      register: sequoiadb_exists
+    - debug: var=sequoiadb_exists.stat.exists
+
+    # 如果上一步检查不存在，则退出
+    - name: exit if /etc/default/sequoiadb not exists
+      fail:
+        msg: "sequoiadb not exists"
+      when: sequoiadb_exists.stat.exists == false
+
+    - name: Copy the script to the remote host
+      copy:
+        src:  removelocaldeploy.sh 
+        dest: /tmp/removelocaldeploy.sh
+        mode: '0755'  # Ensure the script is executable
+      register: copy_result
+
+    - name: Execute remve local deploy
+      script: /tmp/removelocaldeploy.sh
+
+    - name: get install path
+      shell: cat /etc/default/sequoiadb | grep INSTALL_DIR | awk -F "=" '{print $2}'
+      register: result
+    - debug: var=result.stdout_lines
+
+    - name: Copy sequoiadb.conf to the first host
+      copy:
+        src: sequoiadb.conf
+        dest: "{{ result.stdout_lines[0] }}/tools/deploy/"
+        owner: "{{ ansible_ssh_user }}"
+        group: "{{ ansible_ssh_user }}_group"
+        mode: "0644"
+      delegate_to: "{{ groups['all'][0] }}"
+      run_once: true
+
+    - name: Deploy sequoiadb on the first host
+      shell: "{{ result.stdout_lines[0] }}/tools/deploy/quickDeploy.sh --sdb"
+      args:
+        chdir: "{{ result.stdout_lines[0] }}/tools/deploy"
+      register: result_install
+      become_user: "{{ ansible_ssh_user }}"
+      delegate_to: "{{ groups['all'][0] }}"
+      run_once: true
