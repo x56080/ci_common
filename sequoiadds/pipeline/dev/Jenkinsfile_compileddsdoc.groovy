@@ -1,6 +1,5 @@
 pipeline {
     agent { label 'compile_x86_dds' }
-    triggers { cron('H 2 * * *') }
     options {
         disableConcurrentBuilds()
         timestamps()
@@ -10,7 +9,7 @@ pipeline {
         string(name: 'git_rep', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-doc.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
         string(name: 'docker_rep', defaultValue: '192.168.20.106')
-        string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.1.0', description: '')
+        string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.2.0', description: '')
         string(name: 'docker_user', defaultValue: 'liuyuchen', description: '')
         string(name: 'docker_passwd', defaultValue: 'liuyc_2021', description: '')
     }
