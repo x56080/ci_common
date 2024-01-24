@@ -1,0 +1,50 @@
+---
+- name: Set up SSH Key Authentication
+  hosts: db_servers 
+  remote_user: sdbadmin
+  vars:
+    ansible_ssh_pass: "Admin@1024"
+
+  tasks:
+    - name: Generate SSH key pair
+      ansible.builtin.openssh_keypair:
+        path: ~/.ssh/id_rsa
+      register: ssh_keypair
+      delegate_to: localhost
+    - name: Debug SSH Key Pair
+      debug:
+        var: ssh_keypair
+      delegate_to: localhost
+
+    - name: Check if directory exists
+      stat:
+        path: ~/.ssh/
+      register: dir_status
+      ignore_errors: yes
+
+    - name: Debug SSH Public Key
+      debug:
+        var: dir_status
+
+    - name: Create directory with specific permissions if it doesn't exist
+      file:
+        path: ~/.ssh/
+        state: directory
+        mode: "0700"  # 设置目录的权限，例如 "0755" 表示 rwxr-xr-x
+      when: not dir_status.stat.exists
+
+    - name: Check if the file exists
+      stat:
+        path: "~/.ssh/authorized_keys"
+      register: file_stat
+      ignore_errors: yes
+
+    - name: Create the file if it doesn't exist
+      ansible.builtin.file:
+        path: "~/.ssh/authorized_keys"
+        state: touch
+        mode: "0644"
+      when: not file_stat.stat.exists
+    - name: ssh-copy
+      authorized_key: "user=sdbadmin state=present key='{{ lookup('file', '/home/sdbadmin/.ssh/id_rsa.pub')}}'"
+
