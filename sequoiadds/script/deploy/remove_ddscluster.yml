@@ -1,0 +1,40 @@
+---
+- name: Clean SequoiaDB DDS Cluster
+  hosts: db_servers 
+  #become: yes
+  gather_facts: no  # 禁止收集主机信息，加速执行
+  vars:
+    dds_bin_path: "/opt/sequoiadds/bin"  # SequoiaDB DDS的二进制文件路径
+
+  tasks:
+    - name: Get DDS Installation Path from Config
+      shell: cat /etc/default/sequoiadb-dds | grep INSTALL_DIR | awk -F "=" '{print $2}'
+      register: dds_installation_path
+
+    - name: Set DDS Bin Path
+      set_fact:
+        dds_bin_path: "{{ dds_installation_path.stdout }}/bin"
+
+    - name: List SequoiaDB DDS Nodes
+      command: "{{ dds_bin_path }}/sdb_dds_ctl list"
+      register: dds_nodes
+      changed_when: false  # 不管命令是否有变化，都不标记为已更改
+
+    - name: Stop and Remove SequoiaDB DDS Nodes
+      debug:  # 在实际操作之前，先输出要执行的操作以确认
+        var: item 
+      loop: "{{ dds_nodes.stdout_lines[1:] | map('regex_search', '^(\\S+\\s+)(\\d+)', '\\2')  | list }}"
+      when: dds_nodes.stdout_lines is defined and dds_nodes.stdout_lines | length > 2  # 检查是否有节点信息
+
+    - name: Execute stop and remove commands
+      command: "{{ dds_bin_path }}/sdb_dds_ctl stop --port {{ item.0 }}"
+      loop: "{{ dds_nodes.stdout_lines[1:] | map('regex_search', '^(\\S+\\s+)(\\d+)', '\\2')  | list }}"
+      when: dds_nodes.stdout_lines is defined and dds_nodes.stdout_lines | length > 1  # 检查是否有节点信息
+      #ignore_errors: yes  # 忽略命令执行错误
+
+    - name: Execute remove command
+      command: "{{ dds_bin_path }}/sdb_dds_ctl remove --port {{ item.0 }}"
+      loop: "{{ dds_nodes.stdout_lines[1:] | map('regex_search', '^(\\S+\\s+)(\\d+)', '\\2')  | list }}"
+      when: dds_nodes.stdout_lines is defined and dds_nodes.stdout_lines | length > 1  # 检查是否有节点信息
+      #ignore_errors: yes  # 忽略命令执行错误
+
