@@ -12,13 +12,15 @@ function help()
   echo "  -c, --config           config of deploy"
   echo "  --hostlist             hostlist of install sequoiadds"
   echo "  -d, --default-path     default deployment path"
+  echo "  -t, --type             test type[java]"
   echo ""
 }
 
 # 默认的部署路径
 default_path="."
+test_type=""
 
-ARGS=`getopt -o hu:p:c:d: --long help,user:,password:,config:,hostlist:,default-path: -- "$@"`
+ARGS=`getopt -o hu:p:c:d:t: --long help,user:,password:,config:,hostlist:,default-path:,type: -- "$@"`
 
 eval set -- "${ARGS}"
 
@@ -44,6 +46,9 @@ do
     -d | --default-path)                   default_path=$2
                                             shift 2
                                             ;;
+    -t | --type)                            test_type=$2
+                                            shift 2
+                                            ;;
     --)                                     shift
                                             break
                                             ;;
@@ -56,6 +61,10 @@ done
 # 设置默认值
 user=${user:-root}
 userpwd=${userpwd:-Sdb@123123}
+if [ -z "$deployconfig" ] && [ -n "$test_type" ];then
+   cp config/deployconfig_${test_type}.yml deployconfig.yml
+fi
+
 deployconfig=${deployconfig:-deployconfig.yml}
 hostlist=${hostlist:-192.168.24.112,192.168.24.113,192.168.24.114}
 
