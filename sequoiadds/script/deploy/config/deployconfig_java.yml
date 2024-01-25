@@ -1,0 +1,51 @@
+global:
+  # datah 登录用户，需要确保执行 sdb-dds-cc 的用户可以使用此用户免密登录到所有部署机器（不填默认使用执行用户）
+  user: "sdbadmin"
+  # datah 端口号（不填默认使用 22）
+  datahPort: 22
+
+
+# standalone 部署模式下只需要填写：[global, standalone]
+# replset 部署模式只需要填写：[global, replset] 并且 replset 只能填写一个并且为非 configSvr
+# shard 部署模式需要同时填写：[global, routers, replset]，并且 replset 必须包含一个 configSvr
+#
+# 每个节点可以设置如下常用短配置：
+# port: number        => 相当于配置 config.net.port=xxx
+# bindIp: string      => 相当于配置 config.net.bindIp=xxx
+# dbPath: string      => 相当于配置 config.storage.dbPath=xxx
+# systemLog: string   => 相当于配置 config.systemLog.path=xxx, config.systemLog.destination=file
+# logAppend: boolean  => 相当于配置 config.systemLog.logAppend=xxx
+#
+# 每个节点都可以设置 MongoDB 原始配置信息，如果短配置与 config 中的配置重复，config 中的配置会被覆盖
+# 一般情况下如果不需要可以不用填写:
+# config:
+#   xxx: xxx
+
+replset:
+  - replName: rs1
+    # 是否为配置服务副本集，在 shard 部署模式下使用并且只能指定一个
+    members:
+      - host: "${HOST1}"
+        port: 27017
+        bindIp: "0.0.0.0"
+        dbPath: "/data/sequoiadds/27017"
+        systemLog: "/data/sequoiadds/27017/mongod.log"
+        config:
+          setParameter:
+            enableTestCommands: 1
+      - host: "${HOST2}"
+        port: 27017
+        bindIp: "0.0.0.0"
+        dbPath: "/data/sequoiadds/27017"
+        systemLog: "/data/sequoiadds/27017/mongod.log"
+        config:
+          setParameter:
+            enableTestCommands: 1
+      - host: "${HOST3}"
+        port: 27017
+        bindIp: "0.0.0.0"
+        dbPath: "/data/sequoiadds/27017"
+        systemLog: "/data/sequoiadds/27017/mongod.log"
+        config:
+          setParameter:
+            enableTestCommands: 1
