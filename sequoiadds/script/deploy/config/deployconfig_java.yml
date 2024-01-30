@@ -26,26 +26,26 @@ replset:
     # 是否为配置服务副本集，在 shard 部署模式下使用并且只能指定一个
     members:
       - host: "${HOST1}"
-        port: 27017
+        port: ${PORT} 
         bindIp: "0.0.0.0"
-        dbPath: "/data/sequoiadds/27017"
-        systemLog: "/data/sequoiadds/27017/mongod.log"
+        dbPath: "/data/sequoiadds/${PORT}"
+        systemLog: "/data/sequoiadds/${PORT}/mongod.log"
         config:
           setParameter:
             enableTestCommands: 1
       - host: "${HOST2}"
-        port: 27017
+        port: ${PORT}
         bindIp: "0.0.0.0"
-        dbPath: "/data/sequoiadds/27017"
-        systemLog: "/data/sequoiadds/27017/mongod.log"
+        dbPath: "/data/sequoiadds/${PORT}"
+        systemLog: "/data/sequoiadds/${PORT}/mongod.log"
         config:
           setParameter:
             enableTestCommands: 1
       - host: "${HOST3}"
-        port: 27017
+        port: ${PORT}
         bindIp: "0.0.0.0"
-        dbPath: "/data/sequoiadds/27017"
-        systemLog: "/data/sequoiadds/27017/mongod.log"
+        dbPath: "/data/sequoiadds/${PORT}"
+        systemLog: "/data/sequoiadds/${PORT}/mongod.log"
         config:
           setParameter:
             enableTestCommands: 1
