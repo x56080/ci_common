@@ -13,14 +13,16 @@ function help()
   echo "  --hostlist             hostlist of install sequoiadds"
   echo "  -d, --default-path     default deployment path"
   echo "  -t, --type             test type[java]"
+  echo "  -k, --keep-existing    keep existing deployment (do not remove)"
   echo ""
 }
 
 # 默认的部署路径
 default_path="."
 test_type=""
-
-ARGS=`getopt -o hu:p:c:d:t: --long help,user:,password:,config:,hostlist:,default-path:,type: -- "$@"`
+keep_existing=false
+port=27017
+ARGS=`getopt -o hu:p:c:d:t:k --long help,user:,password:,config:,hostlist:,default-path:,type:,keep-existing -- "$@"`
 
 eval set -- "${ARGS}"
 
@@ -46,8 +48,12 @@ do
     -d | --default-path)                   default_path=$2
                                             shift 2
                                             ;;
-    -t | --type)                            test_type=$2
+    -t | --type)                           test_type=$2
                                             shift 2
+                                            ;;
+    -k | --keep-existing)                  keep_existing=true
+                                            shift
+                                            ;;
                                             ;;
     --)                                     shift
                                             break
@@ -100,9 +106,14 @@ if [ $isneedsetupssh -eq 1 ];then
 fi
 
 # 构造 ansible-playbook 命令
-ansible-playbook -i "${default_path}/inventory.ini" remove_ddscluster.yml -l db_servers --extra-vars "ansible_ssh_pass=${userpwd}" --extra-vars "ansible_ssh_user=${user}"
-test $? -ne 0 && echo "remove cluster failed!" && exit 1
+if [ $keep_existing = false ];then
+  ansible-playbook -i "${default_path}/inventory.ini" remove_ddscluster.yml -l db_servers --extra-vars "ansible_ssh_pass=${userpwd}" --extra-vars "ansible_ssh_user=${user}"
+  test $? -ne 0 && echo "remove cluster failed!" && exit 1
+else
+  port=28017
+fi
 
+sed -i "s/\${PORT}/${port}/g" deployconfig.yml
 latest_tool_package=$(wget -qO- http://192.168.29.80:8080/view/daily_tools/job/dailybuild_clusterconfig/lastSuccessfulBuild/api/json | grep -oE 'sdb-dds-cc_v[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | tail -n 1)
 # 下载最新版本的工具包
 wget "http://192.168.29.80:8080/view/daily_tools/job/dailybuild_clusterconfig/lastSuccessfulBuild/artifact/build/$latest_tool_package"
