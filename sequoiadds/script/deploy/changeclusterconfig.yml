@@ -1,0 +1,39 @@
+---
+- name: Update and restart SequoiaDB DDS
+  hosts: db_servers
+  gather_facts: yes 
+
+  vars:
+    path_of_cert: "dds-test/x509"
+    port: 27017
+
+  tasks:
+    - name: Get installation path from /etc/default/sequoiadb-dds
+      shell: "source /etc/default/sequoiadb-dds && echo $INSTALL_DIR"
+      register: install_dir_result
+
+    - name: Determine remote machine architecture
+      set_fact:
+        machine_arch: "{{ ansible_facts['machine'] }}"
+
+    - name: Stop all SequoiaDB DDS nodes
+      shell: "{{ install_dir_result.stdout }}/bin/sdb_dds_ctl stop --all"
+
+    - name: Sync yq based on machine architecture
+      synchronize:
+        src: "{{ 'tools/yq_linux_arm64' if machine_arch == 'aarch64' else 'tools/yq_linux_amd64' }}"
+        dest: "{{ install_dir_result.stdout }}/bin/yq"
+        mode: push
+
+    - name: Sync certificates to installation directory
+      synchronize: 
+        src: "x509"
+        dest: "{{ install_dir_result.stdout }}/"
+        mode: push
+
+    - name: Modify /opt/sequoiadds/conf/local/27017.yaml using yq
+      command: "{{ install_dir_result.stdout }}/bin/yq eval '.net.tls = {\"mode\": \"requireTLS\", \"certificateKeyFile\": \"{{ install_dir_result.stdout }}x509/test-server1.pem\", \"CAFile\": \"{{ install_dir_result.stdout }}x509/test-ca.pem\"}' -i {{ install_dir_result.stdout }}/conf/local/{{port}}.yaml"
+
+    - name: Start all SequoiaDB DDS nodes
+      shell: "{{ install_dir_result.stdout }}/bin/sdb_dds_ctl start --all"
+
