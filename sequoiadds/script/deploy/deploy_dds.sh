@@ -54,7 +54,6 @@ do
     -k | --keep-existing)                  keep_existing=true
                                             shift
                                             ;;
-                                            ;;
     --)                                     shift
                                             break
                                             ;;
