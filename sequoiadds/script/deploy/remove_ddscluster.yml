@@ -29,12 +29,16 @@
     - name: Execute stop and remove commands
       command: "{{ dds_bin_path }}/sdb_dds_ctl stop --port {{ item.0 }}"
       loop: "{{ dds_nodes.stdout_lines[1:] | map('regex_search', '^(\\S+\\s+)(\\d+)', '\\2')  | list }}"
-      when: dds_nodes.stdout_lines is defined and dds_nodes.stdout_lines | length > 1  # 检查是否有节点信息
-      #ignore_errors: yes  # 忽略命令执行错误
+      when:
+        - dds_nodes.stdout_lines is defined
+        - dds_nodes.stdout_lines | length > 1
+        - item is not none  # 新增检查，确保 item 不是 None
 
     - name: Execute remove command
       command: "{{ dds_bin_path }}/sdb_dds_ctl remove --port {{ item.0 }}"
       loop: "{{ dds_nodes.stdout_lines[1:] | map('regex_search', '^(\\S+\\s+)(\\d+)', '\\2')  | list }}"
-      when: dds_nodes.stdout_lines is defined and dds_nodes.stdout_lines | length > 1  # 检查是否有节点信息
-      #ignore_errors: yes  # 忽略命令执行错误
+      when:
+        - dds_nodes.stdout_lines is defined
+        - dds_nodes.stdout_lines | length > 1
+        - item is not none  # 新增检查，确保 item 不是 None
 
