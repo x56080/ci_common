@@ -32,7 +32,7 @@
         mode: push
 
     - name: Modify /opt/sequoiadds/conf/local/27017.yaml using yq
-      command: "{{ install_dir_result.stdout }}/bin/yq eval '.net.tls = {\"mode\": \"requireTLS\", \"certificateKeyFile\": \"{{ install_dir_result.stdout }}x509/test-server1.pem\", \"CAFile\": \"{{ install_dir_result.stdout }}x509/test-ca.pem\"}' -i {{ install_dir_result.stdout }}/conf/local/{{port}}.yaml"
+      command: "{{ install_dir_result.stdout }}/bin/yq eval '.net.tls = {\"mode\": \"requireTLS\", \"certificateKeyFile\": \"{{ install_dir_result.stdout }}x509/test-server.pem\", \"CAFile\": \"{{ install_dir_result.stdout }}x509/test-ca.pem\"}' -i {{ install_dir_result.stdout }}/conf/local/{{port}}.yaml"
 
     - name: Start all SequoiaDB DDS nodes
       shell: "{{ install_dir_result.stdout }}/bin/sdb_dds_ctl start --all"
