@@ -125,6 +125,9 @@ pipeline {
     post{
         always{
             junit testResults:'**/dds-test/drivers/java/**/build/test-results/test/*.xml',allowEmptyResults: true, keepLongStdio: true
+            sh "cd $workspace/nossl_test/dds-test/scripts/; python3 backuplog.py -hl 192.168.24.63 192.168.24.65 192.168.24.66 -u sdbadmin -p Admin@1024 -k /ssd/sequoiadds/27017/log/ /ssd/sequoiadds/28017/log/ -b ${WORKSPACE}/backup" 
+            tar archive: true, compress: true, defaultExcludes: false, dir: 'backup', exclude: '', file: "${JOB_NAME}_${BUILD_NUMBER}.tar.gz", glob: '', overwrite: true
         }
+        
     }
 }
