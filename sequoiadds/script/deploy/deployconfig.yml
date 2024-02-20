@@ -29,14 +29,14 @@ replset:
         port: 27017
         bindIp: "0.0.0.0"
         dbPath: "/data/sequoiadds/27017"
-        systemLog: "/data/sequoiadds/27017/mongod.log"
+        systemLog: "/data/sequoiadds/27017/log/mongod.log"
       - host: "${HOST2}"
         port: 27017
         bindIp: "0.0.0.0"
         dbPath: "/data/sequoiadds/27017"
-        systemLog: "/data/sequoiadds/27017/mongod.log"
+        systemLog: "/data/sequoiadds/27017/log/mongod.log"
       - host: "${HOST3}"
         port: 27017
         bindIp: "0.0.0.0"
         dbPath: "/data/sequoiadds/27017"
-        systemLog: "/data/sequoiadds/27017/mongod.log"
+        systemLog: "/data/sequoiadds/27017/log/mongod.log"
