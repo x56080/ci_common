@@ -29,7 +29,7 @@ replset:
         port: ${PORT} 
         bindIp: "0.0.0.0"
         dbPath: "/data/sequoiadds/${PORT}"
-        systemLog: "/data/sequoiadds/${PORT}/mongod.log"
+        systemLog: "/data/sequoiadds/${PORT}/log/mongod.log"
         config:
           setParameter:
             enableTestCommands: 1
@@ -37,7 +37,7 @@ replset:
         port: ${PORT}
         bindIp: "0.0.0.0"
         dbPath: "/data/sequoiadds/${PORT}"
-        systemLog: "/data/sequoiadds/${PORT}/mongod.log"
+        systemLog: "/data/sequoiadds/${PORT}/log/mongod.log"
         config:
           setParameter:
             enableTestCommands: 1
@@ -45,7 +45,7 @@ replset:
         port: ${PORT}
         bindIp: "0.0.0.0"
         dbPath: "/data/sequoiadds/${PORT}"
-        systemLog: "/data/sequoiadds/${PORT}/mongod.log"
+        systemLog: "/data/sequoiadds/${PORT}/log/mongod.log"
         config:
           setParameter:
             enableTestCommands: 1
