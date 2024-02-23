@@ -19,6 +19,7 @@ pipeline {
             steps {
                 cleanWs()
                 checkout scmGit(branches: [[name: "${params.branch}"]], extensions: [], userRemoteConfigs: [[url: "${params.git_repository}"]])
+                sh 'docker login -u wangwenjing -p wangwj_2012 192.168.20.106'
             }
         }
         
