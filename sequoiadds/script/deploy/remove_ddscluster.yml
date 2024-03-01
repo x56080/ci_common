@@ -3,6 +3,7 @@
   hosts: db_servers 
   #become: yes
   gather_facts: no  # 禁止收集主机信息，加速执行
+  any_errors_fatal: true
   vars:
     dds_bin_path: "/opt/sequoiadds/bin"  # SequoiaDB DDS的二进制文件路径
 
@@ -27,7 +28,7 @@
       when: dds_nodes.stdout_lines is defined and dds_nodes.stdout_lines | length > 2  # 检查是否有节点信息
 
     - name: Execute stop and remove commands
-      command: "{{ dds_bin_path }}/sdb_dds_ctl stop --port {{ item.0 }}"
+      command: "{{ dds_bin_path }}/sdb_dds_ctl stop --port {{ item.0 }} --force"
       loop: "{{ dds_nodes.stdout_lines[1:] | map('regex_search', '^(\\S+\\s+)(\\d+)', '\\2')  | list }}"
       when:
         - dds_nodes.stdout_lines is defined
