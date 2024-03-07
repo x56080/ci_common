@@ -8,10 +8,7 @@ pipeline {
     parameters{
         string(name: 'git_rep', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-doc.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
-        string(name: 'docker_rep', defaultValue: '192.168.20.106')
         string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.3.0', description: '')
-        string(name: 'docker_user', defaultValue: 'liuyuchen', description: '')
-        string(name: 'docker_passwd', defaultValue: 'liuyc_2021', description: '')
         string(name: 'build_script_arguments', defaultValue: '--pdf --pdf-name-prefix sequoiadb-dds-manual', description: 'arguments pass to build.py')
     }
 
@@ -25,7 +22,6 @@ pipeline {
 
         stage("pull image"){
         	steps{
-        		sh "docker login ${params.docker_rep} -u ${params.docker_user} -p ${params.docker_passwd}"
         		sh "docker pull ${params.docker_image}"
         	}
         }
