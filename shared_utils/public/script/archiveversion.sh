@@ -83,7 +83,7 @@ if [ $product = "sequoiadds" ];then
    if [ ! -d ${destDir} ];then
       mkdir -p ${destDir}
    fi
-   echo sudo mv $version ${destDir}
+   sudo mv $version ${destDir}
 else
    baseDir="${baseDir}${branch}/"
    if [ ! -d $baseDir ];then
