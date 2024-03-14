@@ -1,7 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 param(
     [string]$productName,
-    [string]$version
+    [string]$version,
+    [string]$targetPath
 )
 
 # 定义一个函数来获取版本号前缀
@@ -31,7 +32,7 @@ $sourcePath = "\\192.168.20.253\share_new\7.版本归档_NEW\"
 Write-Host "Source path : $sourcePath"
 
 # 替换非法字符并构建目标路径
-$targetPath = "C:\upx\public"
+#$targetPath = "C:\upx\public"
 
 
 # 如果 productName 为 "cc" 或 "m2s"，在产品名前加一层 "misc" 目录
