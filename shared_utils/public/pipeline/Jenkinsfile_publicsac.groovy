@@ -3,6 +3,7 @@ pipeline {
     parameters {
         choice(name: 'BRANCH', choices: ['master','3.4','3.6','4.0','4.0.1','4.2','4.2.1'], description: '')
         string(name: 'GIT_SHA', defaultValue: '', description: '')
+        booleanParam(name: 'SKIP_MAKE', defaultValue: false, description: '')
     }
     
     environment {
@@ -16,6 +17,7 @@ pipeline {
     }
 
     stages {
+        when { {expression { params.SKIP_MAKE == false }}}
         stage('call sub project') {
             steps {
                 build job: 'Publish_sequoiaSAC_sub', parameters: [string(name: 'BRANCH', value: "${params.BRANCH}"), string(name: 'GIT_SHA', value: "${params.GIT_SHA}")]

@@ -1,6 +1,7 @@
 param (
     [string]$productName,
-    [string]$version
+    [string]$version,
+    [string]$srcBasePath
 )
 
 $productMap = @{
@@ -15,13 +16,13 @@ $productMap = @{
 }
 
 # 设置变量
-$upxPath = "C:\upx\upx.exe"
+#$upxPath = "C:\upx\upx.exe"
 $serviceName = "sequoiadb"
 $operator = "wangwenjing"
 $password = "c0m17OPxzoBbviQlYQVRWEbaCCp09MP2"
 $command = ".\upx.exe"
 
-$srcBasePath = "C:\upx\public\"
+#$srcBasePath = "C:\upx\public\"
 $destBasePath = "/images/"
 
 $srcPath = Join-Path -Path $srcBasePath -ChildPath $version
