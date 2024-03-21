@@ -20,13 +20,13 @@ pipeline {
         stage("select branch"){
             steps {
                script{
-                   if ( workspace.container("dev") != -1 )
-                   {
+                   if ( JOB_NAME =~ "dev" ){
                       BRANCH="dds_doc"
                    }
                }
             }
         }
+
         stage("pull code"){
             steps{
                 cleanWs()
