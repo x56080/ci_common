@@ -12,11 +12,25 @@ pipeline {
         string(name: 'build_script_arguments', defaultValue: '--pdf --pdf-name-prefix sequoiadb-dds-manual', description: 'arguments pass to build.py')
     }
 
+    environment {
+       BRANCH="main"
+    }
+
     stages{
+        stage("select branch"){
+            steps {
+               script{
+                   if ( workspace.container("dev") != -1 )
+                   {
+                      BRANCH="dds_doc"
+                   }
+               }
+            }
+        }
         stage("pull code"){
             steps{
                 cleanWs()
-                checkout scmGit(branches:[[name: "${params.branch}"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'dds-doc']],userRemoteConfigs:[[url:"${params.git_rep}"]])
+                checkout scmGit(branches:[[name: "${BRANCH}"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'dds-doc']],userRemoteConfigs:[[url:"${params.git_rep}"]])
             }
         }
 
