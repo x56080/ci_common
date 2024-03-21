@@ -7,7 +7,7 @@ pipeline {
 
     parameters{
         string(name: 'git_rep', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-doc.git', description: '')
-        string(name: 'branch', defaultValue: 'main', description: '')
+        choice(name: 'branch', choices: ['main','dds_doc'], description: 'Select target architecture')
         string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.3.0', description: '')
         string(name: 'build_script_arguments', defaultValue: '--pdf --pdf-name-prefix sequoiadb-dds-manual', description: 'arguments pass to build.py')
     }
