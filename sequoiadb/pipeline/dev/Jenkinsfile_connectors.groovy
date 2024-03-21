@@ -2,7 +2,6 @@ pipeline {
     agent {label 'compile_x86_3'}
     parameters {
         string(name: 'git_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/sdbconnectors.git', description: '')
-        string(name: 'branch', defaultValue: 'master', description: '')
         choice(name: 'branch', choices: ['master','flink1.14'], description: '')
         booleanParam(name: 'is_release', defaultValue: 'false', description: '')
     }
