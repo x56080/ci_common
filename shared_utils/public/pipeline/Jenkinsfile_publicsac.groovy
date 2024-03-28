@@ -17,6 +17,11 @@ pipeline {
     }
 
     stages {
+        stage("cleanWS"){
+           steps{
+             cleanWs()
+           }
+        }
         stage('call sub project') {
             when { expression { params.SKIP_MAKE == false }}
             steps {

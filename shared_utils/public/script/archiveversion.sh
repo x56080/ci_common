@@ -61,7 +61,9 @@ destDir=${mapdestDir[$product]}
 
 if [ $product = "sequoiadds" ];then
    source /etc/profile
+   test -d dds && rm -rf dds
    git clone http://gitlab.sequoiadb.com/sequoiadb/dds.git
+   test $? -ne 0 && echo "exec clone http://gitlab.sequoiadb.com/sequoiadb/dds.git" && exit 1
    cd dds
    tag=$(git describe --tags --abbrev=0)
    msg=$(git tag -l --format='%(contents)' $tag)

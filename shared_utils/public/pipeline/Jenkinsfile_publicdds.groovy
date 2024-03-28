@@ -23,6 +23,11 @@ pipeline {
     }
 
     stages {
+        stage('cleanWs'){
+           steps{
+             cleanWs()
+           }
+        }
         stage('compile') {
             when {expression { params.exec_compile == true }}
             parallel {
