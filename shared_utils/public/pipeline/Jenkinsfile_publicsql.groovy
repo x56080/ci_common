@@ -39,7 +39,7 @@ pipeline {
                 }
                 stage('build mysql'){
                     steps {
-                        build job: 'Publish_SequoiaSQL_MySQL', parameters: [string(name: 'BRANCH', value: "${params.BRANCH}"), string(name: 'COMPILE_SQL', value: 'mysql'), string(name: 'GIT_SHA', value: "${params.GIT_SHA}"), string(name: 'SDB_DEPNAME', value: ''), booleanParam(name: 'EXECUTE_TEST', value: "${params.EXECUTE_TEST}")]
+                        build job: 'Publish_SequoiaSQL_MySQL', parameters: [string(name: 'BRANCH', value: "master"), string(name: 'COMPILE_SQL', value: 'mysql'), string(name: 'GIT_SHA', value: "${params.GIT_SHA}"), string(name: 'SDB_DEPNAME', value: ''), booleanParam(name: 'EXECUTE_TEST', value: "${params.EXECUTE_TEST}")]
                     }
                 }
             }
