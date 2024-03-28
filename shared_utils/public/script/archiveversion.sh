@@ -18,11 +18,13 @@ mapbaseDir[sequoiadb]="/ssd/jenkins_archive/archive_new/SequoiaDB/"
 mapbaseDir[sequoiadds]="/sequoiadb/7.版本归档_NEW/SequoiaDDS/"
 mapbaseDir[sequoiascm]="/ssd/jenkins_archive/publish_archive/版本归档_NEW/SequoiaCM/"
 mapbaseDir[sequoiasac]="/ssd/jenkins_archive/publish_archive/版本归档_NEW/SequoiaSAC/"
+mapbaseDir[sequoiasql]="/ssd/jenkins_archive/publish_archive/版本归档_NEW/SequoiaSQL/"
 
 mapdestDir[sequoiadb]="/sequoiadb/7.版本归档_NEW/SequoiaDB/"
 mapdestDir[sequoiadds]="/sequoiadb/7.版本归档_NEW/SequoiaDDS/"
 mapdestDir[sequoiascm]="/sequoiadb/7.版本归档_NEW/SequoiaCM/"
 mapdestDir[sequoiasac]="/sequoiadb/7.版本归档_NEW/SequoiaSAC/"
+mapdestDir[sequoiasql]="/sequoiadb/7.版本归档_NEW/SequoiaSQL/"
 
 
 branch='master'
