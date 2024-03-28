@@ -3,6 +3,7 @@ pipeline {
     parameters {
         string(name: 'git_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/sdbconnectors.git', description: '')
         choice(name: 'branch', choices: ['master','flink1.14'], description: '')
+        string(name: 'git_sha', defaultValue: '', description: '')
         booleanParam(name: 'is_release', defaultValue: 'false', description: '')
     }
     
@@ -30,8 +31,14 @@ pipeline {
         }
         stage('pull code') {
             steps {
-                cleanWs()
-                checkout scmGit(branches: [[name: "${params.branch}"]], extensions: [], userRemoteConfigs: [[url: "${params.git_repository}"]])
+                script {
+                   cleanWs()
+                   if ( params.git_sha != "" ){
+                     checkout scmGit(branches: [[name: "${params.git_sha}"]], extensions: [], userRemoteConfigs: [[url: "${params.git_repository}"]])
+                   }else{
+                     checkout scmGit(branches: [[name: "${params.branch}"]], extensions: [], userRemoteConfigs: [[url: "${params.git_repository}"]])
+                   }
+                }
             }
         }
         
@@ -50,7 +57,7 @@ pipeline {
         
         stage('archive') {
             steps {
-                archiveArtifacts artifacts: 'build/*.jar', followSymlinks: false
+                archiveArtifacts artifacts: 'build/*.jar,build/*.tar.gz', followSymlinks: false
             }
         }
     }
