@@ -1,7 +1,7 @@
 pipeline {
     agent {label 'upload'}
     parameters {
-        choice(name: 'product', choices: ['SequoiaDDS','SequoiaSAC','SequoiaDB','SequoiaCM','cc','SequoiaSQL','m2s'], description: '')
+        choice(name: 'product', choices: ['SequoiaDDS','SequoiaSAC','SequoiaDB','SequoiaCM','cc','SequoiaSQL','m2s', 'Connector'], description: '')
         string(name: 'version', defaultValue: '3.4.4', description: '')
     }
     
