@@ -37,7 +37,7 @@ pipeline {
                 stage("make MySQL") {
                    steps {
                        script{
-                          if (params.SQL_BRANCH == ""){
+                          if (params.SQL_BRANCH != ""){
                              build job: 'Publish_SequoiaSQL_MySQL', parameters: [string(name: 'BRANCH', value: "master"), string(name: 'COMPILE_SQL', value: 'mysql'), string(name: 'GIT_SHA', value: ''), string(name: 'SDB_DEPNAME', value: ''), booleanParam(name: 'EXECUTE_TEST', value: "${params.EXECUTE_TEST}")]
                          }
                       }
@@ -59,7 +59,7 @@ pipeline {
         stage('archive version') {
             steps {
                 script{
-                   if (params.SQL_BRANCH 1= ""){
+                   if (params.SQL_BRANCH != ""){
                       copyArtifacts filter: '**/*-linux_x86_64-*.run', fingerprintArtifacts: true, flatten: true, projectName: 'Publish_SequoiaDB_sub', selector: lastSuccessful(), target: '.'
                    }
                    copyArtifacts filter: '**/*-linux_x86_64-enterprise-*.run', fingerprintArtifacts: true, flatten: true, projectName: 'Publish_SequoiaDB_sub', selector: lastSuccessful(), target: '.'
