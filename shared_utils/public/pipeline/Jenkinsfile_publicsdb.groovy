@@ -36,6 +36,7 @@ pipeline {
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'shared_utils']]], [$class: 'RelativeTargetDirectory', relativeTargetDir: 'misc']], userRemoteConfigs: [[url: "$CI_GIT_URL"]])
                 sh "cp misc/shared_utils/public/script/archiveversion.sh $WORKSPACE"
+                sh "cp misc/sequoiadb/partofpublictar/* $WORKSPACE"
                 sh "./archiveversion.sh -p sequoiadb -b ${params.BRANCH}"
             }
         }
