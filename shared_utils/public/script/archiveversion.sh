@@ -115,10 +115,22 @@ else
      find . -maxdepth 1 -type f -exec mv {} x86_64 \;      
    fi
 
+   if [ $product = "sequoiadb" ];then
+     packagenames=(sequoiadb-${version}-linux_x86_64 sequoiadb-${version}-enterprise-linux_x86_64 sequoiadb-${version}-enterprise-hybrid-linux_x86_64)
+     suffixnames=(linux_x86_64-installer linux_x86_64-enterprise-installer linux_x86_64-enterprise-hybrid-installer)
+     for((pos = 0; pos <${#packagenames[@]}; pos++))
+     do
+        ls *${suffixnames[$pos]}.run 1>>/dev/null 2>&1
+        if [ $? -eq 0 ];then
+           tar -czvf ${packagenames[$pos]}.tar.gz *${suffixnames[$pos]}.run readme.txt setup.sh
+        fi
+     done
+     cp *.tar.gz $baseDir/x86_64
+   fi
    if [ ! -d "${destDir}" ];then
       mkdir -p "${destDir}"
    fi
 
-   sudo mv "$baseDir" "$destDir"
+   #sudo mv "$baseDir" "$destDir"
 fi
 
