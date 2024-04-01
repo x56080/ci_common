@@ -36,7 +36,7 @@ function get_cc_release_notes()
 function archive_cc()
 {
    version=$1
-   get_release_notes $version
+   get_cc_release_notes $version
    mkdir -p $version
    cp *.tar.gz $version
    cp *.txt $version
