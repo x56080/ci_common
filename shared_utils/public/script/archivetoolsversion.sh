@@ -15,6 +15,7 @@ EOF
 function get_cc_release_notes()
 {
    version=$1
+   source /etc/profile # 为了使用新版git
    release_note="release.notes"
    tar -xzf *.tar.gz
    $(find ./ -name sdb-dds-cc) --version >>$release_note
@@ -58,7 +59,6 @@ function get_m2s_release_notes()
 function archive_m2s()
 {
    version=$1
-   get_m2s_release_notes $version
    mkdir -p $version/x86_64
    mkdir -p $version/aarch64
    get_m2s_release_notes
