@@ -1,5 +1,10 @@
 pipeline {
     agent { label 'master' }
+    options {
+        disableConcurrentBuilds()
+        timestamps()
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '5', artifactNumToKeepStr: '5', daysToKeepStr: '5', numToKeepStr: '5'))
+    }
 
     stages {
         stage('check and clear disk space') {
