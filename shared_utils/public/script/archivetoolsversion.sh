@@ -69,7 +69,7 @@ function archive_m2s()
 declare -A mapdestDir
 mapdestDir[cc]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/cc/"
 mapdestDir[m2s]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/m2s/"
-mapdestDir[sequoiashake]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/sequoiashake"
+mapdestDir[sequoiashake]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/sequoiashake/"
 mapdestDir[Connector]="/sequoiadb/7.版本归档_NEW/Connector/"
 mapdestDir[dds_java]="/sequoiadb/7.版本归档_NEW/SequoiaDDS/driver/Java/"
 
