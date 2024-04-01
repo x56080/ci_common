@@ -45,22 +45,22 @@ pipeline {
                     sh 'cp misc/shared_utils/public/script/archivetoolsversion.sh archiveversion.sh'
                     if (params.component == "connector"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_sdbconnectors', selector: lastSuccessful()
-                        sh 'archiveversion.sh -p Connector'
+                        sh './archiveversion.sh -p Connector'
                     }else if (params.component == "cc"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'dailybuild_clusterconfig', selector: lastSuccessful()
-                        sh 'archiveversion.sh -p cc'
+                        sh './archiveversion.sh -p cc'
                         
                     }else if (params.component == "m2s"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'dailybuild_m2s', selector: lastSuccessful()
-                        sh 'archiveversion.sh -p m2s'
+                        sh './archiveversion.sh -p m2s'
                         
                     }else if (params.component == "sequoiashake"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'dailybuild_sequoiashake', selector: lastSuccessful()
-                        sh "archiveversion.sh -p sequoiashake -v ${params.version}"
+                        sh "./archiveversion.sh -p sequoiashake -v ${params.version}"
                         
                     }else if(params.component == "dds_java"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_driver_java', selector: lastSuccessful()
-                        sh "archiveversion.sh -p dds_java"
+                        sh "./archiveversion.sh -p dds_java"
                         
                     }
                 }
