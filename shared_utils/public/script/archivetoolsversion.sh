@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -x
 function show_help() {
   cat <<EOF
 Usage: $(basename "$0") [options]
@@ -119,7 +120,7 @@ fi
 if [ "$product" = "cc" ];then
    archive_cc $version
 elif [ "$product" = "m2s" ];then
-   archive_ms2 $version
+   archive_m2s $version
 else
    mkdir -p $version
    cp *.tar.gz $version
