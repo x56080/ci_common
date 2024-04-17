@@ -11,7 +11,6 @@ pipeline {
         disableConcurrentBuilds()
         timestamps()
     }
-    triggers { cron('H 5 * * *')}
     stages {
         stage('pull code') {
             steps {
