@@ -34,15 +34,15 @@ pipeline {
         
         stage('exec test') {
             parallel {
-                stage("test1") {
+                stage("x86 test") {
                     steps {
-                        build job: 'test_dds_backup_driver', parameters: [string(name: 'branch', value: "${params.branch}"),string(name: 'dds_version', value: "${params.dds_version}"),string(name: 'cc_version', value: "${params.cc_version}")], wait: true
+                        build job: 'test_dds_backup_driver_x86', parameters: [string(name: 'branch', value: "${params.branch}"),string(name: 'dds_version', value: "${params.dds_version}"),string(name: 'cc_version', value: "${params.cc_version}")], wait: true
                     }
                 }
                 
-                stage("test2") {
+                stage("arm test") {
                     steps {
-                        build job: 'test_dds_backup_driver', parameters: [string(name: 'branch', value: "${params.branch}"),string(name: 'dds_version', value: "${params.dds_version}"),string(name: 'cc_version', value: "${params.cc_version}")], wait: true
+                        build job: 'test_dds_backup_driver_arm', parameters: [string(name: 'branch', value: "${params.branch}"),string(name: 'dds_version', value: "${params.dds_version}"),string(name: 'cc_version', value: "${params.cc_version}")], wait: true
                     }
                 }
             }
