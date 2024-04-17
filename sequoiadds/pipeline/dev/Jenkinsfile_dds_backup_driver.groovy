@@ -8,7 +8,6 @@ pipeline {
         booleanParam(name: 'is_release', defaultValue: true, description: '')
     }
     
-    triggers { cron('H 6 * * *')}
     options {
         disableConcurrentBuilds()
         timestamps()

@@ -11,7 +11,7 @@ pipeline {
     }
     
     options {
-        disableConcurrentBuilds()
+        // disableConcurrentBuilds()
         timestamps()
     }
     
@@ -22,9 +22,6 @@ pipeline {
         PROJECT_NAME="compile_dds-backup"
     }
     
-    triggers { 
-        cron('H 5 * * *')
-    }
     
     stages {
         stage('pull code') {
