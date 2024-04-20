@@ -92,7 +92,7 @@ pipeline {
                 echo "$ret"
                 if ( ret != "0"){
                     currentBuild.result = "UNSTABLE"
-                    tar archive: true, compress: true, defaultExcludes: false, dir: 'sac-auto-testcase/testcases/story/Cypress/cypress/storyPreData', exclude: '', file: 'toryPreData.tar.gz', glob: '', overwrite: true
+                    tar archive: true, compress: true, defaultExcludes: false, dir: 'sac-auto-testcase/testcases/story/Cypress/cypress/screenshots', exclude: '', file: 'screenshots.tar.gz', glob: '', overwrite: true
                 }
             }
         }
