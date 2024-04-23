@@ -17,7 +17,7 @@
         machine_arch: "{{ ansible_facts['machine'] }}"
 
     - name: Stop all SequoiaDB DDS nodes
-      shell: "{{ install_dir_result.stdout }}/bin/sdb_dds_ctl stop --all"
+      shell: "{{ install_dir_result.stdout }}/bin/sdb_dds_ctl stop --all --force"
 
     - name: Sync yq based on machine architecture
       synchronize:
