@@ -60,6 +60,26 @@ pipeline {
                         }
                     }
                 }
+                
+                stage('compile doc'){
+                    environment{
+                        doc_git_rep = "http://gitlab.sequoiadb.com/sequoiadb/dds-doc.git"
+                        docker_image = "192.168.20.106/sequoiadb/dds-doc-builder:0.3.0"
+                        
+                    }
+                    steps{
+                        script{
+                            def buildResultDoc = build job: 'compile_dds_devdoc', parameters: [string(name: 'branch', value: "dds_doc"), string(name: 'git_rep', value: "${doc_git_rep}")]
+                            if (buildResultDoc.resultIsBetterOrEqualTo('SUCCESS')) {
+                                echo "Build doc succeeded!"
+                                // Save the job value for later use
+                                env.JOB_Doc = buildResultDoc.displayName
+                            } else {
+                                error "Build doc failed!"
+                            }
+                        }
+                    }
+                }
             }
         }
         
@@ -121,6 +141,7 @@ pipeline {
                     sh "rm -rf release"
                     copyArtifacts filter: '**/*.run,**/*.run.sha256,**/VERSION,**/*-linux_x86_64.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_x86', selector: lastSuccessful(), target: 'release/x86_64'
                     copyArtifacts filter: '**/*.run,**/*.run.sha256,**/*-linux_aarch64.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_arm', selector: lastSuccessful(), target: 'release/aarch64'
+                    copyArtifacts filter: '**/*.pdf', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_devdoc', selector: lastSuccessful(), target: 'release/'
                 }
             }
         }
@@ -136,4 +157,3 @@ pipeline {
         }
     }
 }
-
