@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'compile_x86_dds' }
+    agent { label 'compile_dds_x86_doc' }
     options {
         disableConcurrentBuilds()
         timestamps()
@@ -12,55 +12,77 @@ pipeline {
         string(name: 'build_script_arguments', defaultValue: '--pdf --pdf-name-prefix sequoiadb-dds-manual', description: 'arguments pass to build.py')
     }
 
-    environment {
-       BRANCH="main"
-    }
-
     stages{
-        stage("select branch"){
+        stage("set condition"){
             steps {
                script{
-                   if ( JOB_NAME =~ "dev" ){
-                      BRANCH="dds_doc"
+                   def sleepTimeLen = (int)(Math.random() * 60) +1
+                   sleep time: "$sleepTimeLen"
+                   if (currentBuild.getBuildCauses()[0].userId  || currentBuild.getBuildCauses()[0].upstreamProject){
+                        env.BRANCH = params.branch
+                   }else{
+                       if (ref != ""){
+                           env.BRANCH = ref.tokenize('/').last()
+                       }else{
+                           env.BRANCH = params.branch
+                       }
+                   }
+                   
+                   echo "${BRANCH}"
+                   if ( JOB_NAME =~ "dev" && env.BRANCH == "dds_doc" ){
+                       env.EXEC_COMPILE = "true"
+                   }
+                   
+                   if (JOB_NAME == "compile_dds_doc" && env.BRANCH == "main"){
+                       env.EXEC_COMPILE = "true"
                    }
                }
             }
         }
 
         stage("pull code"){
+            when {
+                environment name:'EXEC_COMPILE', value: 'true'
+            }
             steps{
                 cleanWs()
-                checkout scmGit(branches:[[name: "${BRANCH}"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'dds-doc']],userRemoteConfigs:[[url:"${params.git_rep}"]])
+                checkout scmGit(branches:[[name: "${env.BRANCH}"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'dds-doc']],userRemoteConfigs:[[url:"${params.git_rep}"]])
             }
         }
 
         stage("pull image"){
-        	steps{
-        		sh "docker pull ${params.docker_image}"
-        	}
+            when {
+                environment name:'EXEC_COMPILE', value: 'true'
+            }
+            steps{
+                sh "docker pull ${params.docker_image}"
+            }
         }
 
         stage("build doc"){
+            when {
+                environment name:'EXEC_COMPILE', value: 'true'
+            }
             agent{
                 docker{
                     image "${params.docker_image}"
-                    label 'compile_x86_dds'
+                    label 'compile_dds_x86_doc'
                     args "--entrypoint= -v $WORKSPACE/dds-doc:/book"
                 }
             }
             steps{
-        		sh "python3 /usr/src/build.py /book ${build_script_arguments}"
-        	}
+            sh "python3 /usr/src/build.py /book ${build_script_arguments}"
+          }
         }
     }
 
     post{
-    	success{
-    		archiveArtifacts allowEmptyArchive: true, artifacts: 'dds-doc/book/*.pdf'
-    	}
+      success{
+        archiveArtifacts allowEmptyArchive: true, artifacts: 'dds-doc/book/*.pdf'
+      }
 
-    	failure {
-    		emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: '$DEFAULT_RECIPIENTS,liuyuchen@sequoiadb.com,zhouhongye@sequoiadb.com'
-    	}
+      failure {
+        emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: '$DEFAULT_RECIPIENTS,liuyuchen@sequoiadb.com,zhouhongye@sequoiadb.com'
+      }
     }
 }
