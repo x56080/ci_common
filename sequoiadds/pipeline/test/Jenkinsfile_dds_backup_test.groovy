@@ -62,6 +62,20 @@ pipeline {
                 success{
                     junit skipOldReports: true, stdioRetention: '', testResults: '**/junitreports/*.xml'
                 }
+                failure {
+                    script {
+                        checkout scmGit(branches:[[name: "main"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'misc']],userRemoteConfigs:[[url:"http://gitlab.sequoiadb.com/sequoiadb/ci/ci_common.git"]])
+                        def csvContent=readCSV file: 'shared_utils/config/dev_groups.csv'
+                        def members=""
+                        csvContent.each { row ->
+                           def group = row[0]
+                           if (group == "dds_group"){
+                               members = row[1];
+                           }
+                        }
+                        emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: '$DEFAULT_RECIPIENTS,${members}'
+                    }
+                }
             }
         }
     }
