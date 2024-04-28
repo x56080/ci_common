@@ -128,6 +128,19 @@ pipeline {
             sh "cd $workspace/nossl_test/dds-test/scripts/; python3 backuplog.py -hl 192.168.24.63 192.168.24.65 192.168.24.66 -u sdbadmin -p Admin@1024 -k /ssd/sequoiadds/27017/log/ /ssd/sequoiadds/28017/log/ -b ${WORKSPACE}/backup" 
             tar archive: true, compress: true, defaultExcludes: false, dir: 'backup', exclude: '', file: "${JOB_NAME}_${BUILD_NUMBER}.tar.gz", glob: '', overwrite: true
         }
-        
+        failure {
+            script {
+                checkout scmGit(branches:[[name: "main"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'misc']],userRemoteConfigs:[[url:"http://gitlab.sequoiadb.com/sequoiadb/ci/ci_common.git"]])
+                def csvContent=readCSV file: 'shared_utils/config/dev_groups.csv'
+                def members=""
+                csvContent.each { row ->
+                   def group = row[0]
+                      if (group == "dds_group"){
+                          members = row[1];
+                      }
+                }
+                emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: '$DEFAULT_RECIPIENTS,${members}'
+            }
+        }
     }
 }
