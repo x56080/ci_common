@@ -131,6 +131,6 @@ else
       mkdir -p "${destDir}"
    fi
 
-   #sudo mv "$baseDir" "$destDir"
+   sudo mv "$baseDir" "$destDir"
 fi
 
