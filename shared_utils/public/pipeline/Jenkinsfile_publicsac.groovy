@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(name: 'BRANCH', choices: ['master','3.4','3.6','4.0','4.0.1','4.2','4.2.1'], description: '')
         string(name: 'GIT_SHA', defaultValue: '', description: '')
-        booleanParam(name: 'SKIP_MAKE', defaultValue: false, description: '')
+        //booleanParam(name: 'SKIP_MAKE', defaultValue: false, description: '')
     }
     
     environment {
