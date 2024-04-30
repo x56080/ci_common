@@ -135,11 +135,14 @@ pipeline {
                 def members=""
                 csvContent.each { row ->
                    def group = row[0]
-                      if (group == "dds_group"){
-                          members = row[1];
-                      }
+                   if (group == "dds_group" || group == "ci_group"){
+                     if ( members != "" ){
+                        members = members + ","
+                     }
+                     members = members + row[1];
+                   }
                 }
-                emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "$DEFAULT_RECIPIENTS,${members}"
+                emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${members}"
             }
         }
     }
