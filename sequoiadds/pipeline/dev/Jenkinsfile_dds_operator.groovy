@@ -112,7 +112,7 @@ pipeline {
             csvContent.each { row ->
                def group = row[0]
                if (group == "dds_group" || group == "ci_group"){
-                  if ( members == "" ){
+                  if ( members != "" ){
                      members = members + ","
                   }
                   members = members + row[1];
