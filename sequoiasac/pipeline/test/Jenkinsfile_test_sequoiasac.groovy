@@ -73,9 +73,11 @@ pipeline {
         
         stage('exec test') {
             steps {
-                def branch="${params.test_branch}"
-                checkout scmGit(branches: [[name: "${branch}"]], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'sac-auto-test']], userRemoteConfigs: [[url: "${params.test_repository}"]])
-                sh ". ~/.virtualenvs/env/bin/activate;cd sac; python localbuild.py --${params.testtype};deactivate"
+                script{
+                   def branch="${params.test_branch}"
+                   checkout scmGit(branches: [[name: "${branch}"]], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'sac-auto-test']], userRemoteConfigs: [[url: "${params.test_repository}"]])
+                   sh ". ~/.virtualenvs/env/bin/activate;cd sac; python localbuild.py --${params.testtype};deactivate"
+                }
             }
         }
         
