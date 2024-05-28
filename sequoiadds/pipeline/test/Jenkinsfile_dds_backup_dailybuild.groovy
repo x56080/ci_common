@@ -9,7 +9,6 @@ pipeline {
     
     parameters{
         string(name: 'branch', defaultValue: 'main', description: '')
-        string(name: 'dds_version', defaultValue: '3.4.8', description: '')
         string(name: 'cc_version', defaultValue: '1.0.4', description: '')
         booleanParam(name: 'is_enterprise', defaultValue: 'false', description: '')
         booleanParam(name: 'is_release', defaultValue: 'false', description: '')
