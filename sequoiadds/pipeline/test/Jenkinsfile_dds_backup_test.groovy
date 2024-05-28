@@ -6,7 +6,6 @@ pipeline {
     parameters {
         string(name: 'repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-backup-driver.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
-        string(name: 'dds_version', defaultValue: '3.4.8', description: '')
         string(name: 'cc_version', defaultValue: '1.0.4', description: '')
     }
     
@@ -38,19 +37,21 @@ pipeline {
                     def host_arch = sh returnStdout: true, script: "uname -p"
                     host_arch = host_arch.trim()
                     def TESTHOSTS = ""
+                    def DDS_PROJECT_NAME=""
                     if (host_arch == "x86_64"){
                         TESTHOSTS=X86_TESTHOSTS
+                        DDS_PROJECT_NAME = "compile_dds_x86"
                     }else{
                         TESTHOSTS=ARM_TESTHOSTS
+                        DDS_PROJECT_NAME = "compile_dds_arm"
                     }
                     
-                    def dds_maj_ver = dds_version.substring(0,dds_version.lastIndexOf("."))
                     def cc_maj_ver = cc_version.substring(0,cc_version.lastIndexOf("."))
                     def backup_package_agent = sh returnStdout: true, script: "basename \$(find ./ -name *.tar.gz)"
                     
                     def execpara = " -DsshUsers=\"${TESTHOSTS}\""
                     execpara += " -DtmpDir=\"${WORKSPACE}/tmp\""
-                    execpara += " -DddsPackagePath=\"${ARCHIVE_PATH}/SequoiaDDS/${dds_maj_ver}/${dds_version}/${host_arch}/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\""
+                    execpara += " -DddsPackagePath=\"http://192.168.29.80:8080/view/daily_dds/job/${DDS_PROJECT_NAME}/lastSuccessfulBuild/artifact/build/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\"""
                     execpara += " -DccPackagePath=\"${ARCHIVE_PATH}/SequoiaMisc/cc/${cc_maj_ver}/${cc_version}/sdb-dds-cc_v${cc_version}.tar.gz\""
                     execpara += " -DddsBackupDownloadUrl=\"http://192.168.29.80:8080/view/daily_dds/job/${PROJECT_NAME}/lastSuccessfulBuild/artifact/build/${backup_package_agent}\""
                     execpara += " -DtimeSyncCmd=\"chronyc -a makestep\""
