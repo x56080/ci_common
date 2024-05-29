@@ -21,7 +21,7 @@ pipeline {
 
     stages {
         
-        stage('Pull code') {
+        stage('Pull code and make') {
             agent {
                label "${params.agent}"
             }
@@ -30,15 +30,6 @@ pipeline {
                     cleanWs()
                     checkout scmGit(branches: [[name: "${branch}"]],  extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'dds']], userRemoteConfigs: [[url: 'http://gitlab.sequoiadb.com/sequoiadb/dds.git']])
                     checkout scmGit(branches: [[name: "${branch}"]], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'dds_tools_archive']], userRemoteConfigs: [[url: 'http://gitlab.sequoiadb.com/sequoiadb/dds-tools-archive.git']])
-                }
-            }
-        }
-        stage('Build') {
-            agent {
-               label "${params.agent}"
-            }
-            steps {
-                script {
                     sh "source /opt/mongodbtoolchain/py3env/bin/activate;cd dds; scl enable devtoolset-9 'python3 build.py install-devcore --separate-debug -j $jobs';deactivate"
                     sh "cd dds; git fetch --tags $git_repository"
                     sh "cd dds; python3 package.py --output-path ./release --tools-path ../dds_tools_archive --pigz --pack-dbg"
