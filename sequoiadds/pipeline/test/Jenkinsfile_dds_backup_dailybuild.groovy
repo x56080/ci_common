@@ -19,7 +19,7 @@ pipeline {
             parallel {
                 stage("compile dds-backup") {
                     steps {
-                        build job: 'compile_dds-backup', parameters: [string(name: 'branch', value: "${params.branch}"),booleanParam(name: 'is_enterprise', value: "${params.is_enterprise}")], wait: true
+                        build job: 'compile_dds-backup_agent', parameters: [string(name: 'branch', value: "${params.branch}"),booleanParam(name: 'is_enterprise', value: "${params.is_enterprise}")], wait: true
                     }
                 }
                 

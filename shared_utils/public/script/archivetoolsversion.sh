@@ -73,7 +73,7 @@ mapdestDir[m2s]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/m2s/"
 mapdestDir[sequoiashake]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/sequoiashake/"
 mapdestDir[Connector]="/sequoiadb/7.版本归档_NEW/Connector/"
 mapdestDir[dds_java]="/sequoiadb/7.版本归档_NEW/SequoiaDDS/driver/Java/"
-
+mapdestDir[dds_backup_agent]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/dds_backup_agent/"
 version=""
 opts=$(getopt -o p:v:h --long product:version:,help -n 'parse-options' -- "$@")
 if [ $? -ne 0 ]; then
