@@ -18,7 +18,7 @@ pipeline {
         ARCHIVE_PATH="/sequoiadb/7.版本归档_NEW/"
         X86_TESTHOSTS="root:Sdb@123123:192.168.29.101,root:Sdb@123123:192.168.29.26"
         ARM_TESTHOSTS="root:Sdb@123123:192.168.24.69,root:Sdb@123123:192.168.24.70"
-        PROJECT_NAME="compile_dds-backup"
+        PROJECT_NAME="compile_dds-backup_agent"
     }
     
     
