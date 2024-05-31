@@ -4,8 +4,8 @@ pipeline {
     parameters {
         string(name: 'repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-backup-driver.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
-        choice(name: 'mode', choices: ['package','deploy'], description: '')
-        booleanParam(name: 'is_release', defaultValue: true, description: '')
+        choice(name: 'mode', choices: ['deploy','package'], description: '')
+        booleanParam(name: 'is_release', defaultValue: false, description: '')
     }
     
     options {
