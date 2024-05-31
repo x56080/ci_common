@@ -102,7 +102,7 @@ pipeline {
                     def src_basedir="sac-auto-testcase/testcases/story/Cypress"
                     def backup_dir="${src_basedir}/backup_screenshots"
                     
-                    sh "mkdir -p $backup_dir; cp -r ${src_basedir}/cypress-visual-screenshots/diff ${backup_dir}; cp -r ${src_basedir}/cypress/screenshots/ ${backup_dir}"
+                    sh "mkdir -p $backup_dir; cp -r ${src_basedir}/cypress-visual-screenshots/diff ${backup_dir}; cp -r ${src_basedir}/cypress/screenshots/ ${backup_dir}; cp -r ${src_basedir}/cypress/downloads ${backup_dir}"
                     tar archive: true, compress: true, defaultExcludes: false, dir: "${backup_dir}", exclude: '', file: 'backup_screenshots.tar.gz', glob: '', overwrite: true
                 }
             }
