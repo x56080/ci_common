@@ -67,6 +67,42 @@ function archive_m2s()
    cp release.notes $version
 }
 
+function get_dds_backup_agent_release_notes()
+{
+   local os_arch=$(arch)
+
+   version=$1
+   source /etc/profile
+   release_note="release.notes"
+
+   tar -xzf *.tar.gz
+   $(find ./ -name dds-backup-agent_${os_arch}) version >>$release_note
+   echo "" >>$release_note
+   echo "dds-backup-agent 是用于执行 SequoiaDB(DDS) 备份恢复的代理" >>$release_note
+   echo "" >>$release_note
+   echo "## dds-backup-agent ${version} 版本说明" >>$release_note
+   test -d dds-backup-agent_$version && rm -rf dds-backup-agent_$version
+
+   git clone http://gitlab.sequoiadb.com/sequoiadb/dds-backup.git
+   test $? -ne 0 && echo "http://gitlab.sequoiadb.com/sequoiadb/dds-backup.git" && exit 1
+   cd dds-backup
+   tag=$(git describe --tags --abbrev=0)
+   msg=$(git tag -l --format='%(contents)' $tag)
+   cd ..
+   echo "">>$release_note
+   echo "$msg">>$release_note
+   iconv -f utf-8 -t gb18030 $release_note > release_note_${version}.txt
+}
+
+function archive_dds_backup_agent()
+{
+   version=$1
+   get_dds_backup_agent_release_notes $version
+   mkdir -p $version
+   cp *.tar.gz $version
+   cp *.txt $version
+}
+
 declare -A mapdestDir
 mapdestDir[cc]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/cc/"
 mapdestDir[m2s]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/m2s/"
@@ -121,6 +157,8 @@ if [ "$product" = "cc" ];then
    archive_cc $version
 elif [ "$product" = "m2s" ];then
    archive_m2s $version
+elif [ "$product" = "dds_backup_agent" ];then
+   archive_dds_backup_agent $version
 else
    mkdir -p $version
    cp *.tar.gz $version
@@ -135,5 +173,3 @@ if [ ! -d "${destDir}" ];then
 fi
 
 sudo mv "$version" "$destDir"
-
-
