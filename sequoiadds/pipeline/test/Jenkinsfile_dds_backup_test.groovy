@@ -7,6 +7,7 @@ pipeline {
         string(name: 'repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-backup-driver.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
         string(name: 'cc_version', defaultValue: '1.0.4', description: '')
+        string(name: 'dds_version', defaultValue: '3.4.14', description: '')
     }
     
     options {
