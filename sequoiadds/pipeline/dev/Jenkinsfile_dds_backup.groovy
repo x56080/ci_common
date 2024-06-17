@@ -4,7 +4,6 @@ pipeline {
     parameters {
         string(name: 'repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-backup.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
-        booleanParam(name: 'is_enterprise', defaultValue: false, description: '') 
     }
     
     options {
@@ -22,11 +21,7 @@ pipeline {
         stage('make') {
             steps {
                 script{
-                    if (params.is_enterprise == true){
-                        sh "python3 build.py -e"
-                    }else{
-                        sh "python3 build.py"
-                    }
+                    sh "python3 build.py"
                 }
             }
         }
