@@ -8,6 +8,8 @@ pipeline {
         string(name: 'branch', defaultValue: 'main', description: '')
         string(name: 'cc_version', defaultValue: '1.0.4', description: '')
         string(name: 'dds_version', defaultValue: '3.4.14', description: '')
+        string(name: 'limit_memory_mb', defaultValue: '2048', description: '')
+        string(name: 'cache_size_gb', defaultValue: '1', description: '')
     }
     
     options {
@@ -34,6 +36,7 @@ pipeline {
         
         stage('exec test') {
             steps {
+                // general testcase
                 script{
                     def host_arch = sh returnStdout: true, script: "uname -p"
                     host_arch = host_arch.trim()
@@ -56,6 +59,9 @@ pipeline {
                     execpara += " -DccPackagePath=\"${ARCHIVE_PATH}/SequoiaMisc/cc/${cc_maj_ver}/${cc_version}/sdb-dds-cc_v${cc_version}.tar.gz\""
                     execpara += " -DddsBackupDownloadUrl=\"http://192.168.29.80:8080/view/daily_dds/job/${PROJECT_NAME}/lastSuccessfulBuild/artifact/build/${backup_package_agent}\""
                     execpara += " -DtimeSyncCmd=\"chronyc -a makestep\""
+                    execpara += " -DlimitMemoryMB=\"${limit_memory_mb}\""
+                    execpara += " -DcacheSizeGB=\"${cache_size_gb}\""
+                    execpara += " -Dtestnames=\"General\""
                     sh "mvn clean test ${execpara}"
                 }
             }
