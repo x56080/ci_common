@@ -89,6 +89,8 @@ function get_dds_backup_agent_release_notes()
    tag=$(git describe --tags --abbrev=0)
    msg=$(git tag -l --format='%(contents)' $tag)
    cd ..
+   test -d dds-backup && rm -rf dds-backup
+
    echo "">>$release_note
    echo "$msg">>$release_note
    iconv -f utf-8 -t gb18030 $release_note > release_note_${version}.txt
