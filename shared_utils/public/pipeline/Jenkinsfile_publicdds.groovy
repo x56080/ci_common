@@ -3,7 +3,7 @@ pipeline {
     
     parameters {
         string(name: 'product_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds.git', description: '')
-        string(name: 'test_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-test.git', description: '')
+        string(name: 'test_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds.git', description: '')
         string(name: 'product_branch', defaultValue: 'main', description: '')
         string(name: 'test_branch', defaultValue: 'main', description: '')
         string(name: 'jobs', defaultValue: '16', description: '')
@@ -92,7 +92,7 @@ pipeline {
                 stage('test x86'){
                     steps{
                         script{
-                            def testResultX86 = build job: 'test_master_dds_x86', parameters: [string(name: 'git_repository', value: "${params.test_repository}"), string(name: 'branch', value: "${params.test_branch}"), string(name: 'host_arch', value: 'x86_64')]
+                            def testResultX86 = build job: 'test_master_dds_x86_basic', parameters: [string(name: 'git_repository', value: "${params.test_repository}"), string(name: 'branch', value: "${params.test_branch}"), string(name: 'host_arch', value: 'x86_64')]
                             if (testResultX86.resultIsBetterOrEqualTo('SUCCESS')) {
                                 echo "Build image succeeded!"
                             } else {
@@ -104,7 +104,7 @@ pipeline {
                 stage('test arm'){
                     steps{
                         script{
-                            def testResultArm = build job: 'test_master_dds_arm', parameters: [string(name: 'git_repository', value: "${params.test_repository}"), string(name: 'branch', value: "${params.test_branch}"), string(name: 'host_arch', value: 'aarch64')]
+                            def testResultArm = build job: 'test_master_dds_arm_basic', parameters: [string(name: 'git_repository', value: "${params.test_repository}"), string(name: 'branch', value: "${params.test_branch}"), string(name: 'host_arch', value: 'aarch64')]
                             if (testResultArm.resultIsBetterOrEqualTo('SUCCESS')) {
                                 echo "Build image succeeded!"
                             } else {
