@@ -18,7 +18,7 @@ pipeline {
 
     environment {
         PRODUCT_PACKAGE_LOCALPATH="/data/product_package"
-        TEST_HOSTLIST="192.168.29.24,192.168.29.104,192.168.29.154,192.168.29.98,192.168.29.21"
+        TEST_HOSTLIST="192.168.29.24,192.168.29.104,192.168.29.154,192.168.29.98,192.168.29.21,192.168.29.159,192.168.29.160,192.168.29.161"
         TARGET_DIR="sac/localbuild/package"
     }
 
