@@ -76,7 +76,7 @@ function get_dds_backup_agent_release_notes()
    release_note="release.notes"
 
    tar -xzf *.tar.gz
-   $(find ./ -name dds-backup-agent_${os_arch}) version >>$release_note
+   $(find ./ -name dds-backup-agent_${os_arch}) version >$release_note
    echo "" >>$release_note
    echo "dds-backup-agent 是用于执行 SequoiaDB(DDS) 备份恢复的代理" >>$release_note
    echo "" >>$release_note
