@@ -69,7 +69,7 @@ pipeline {
                     }
                     steps{
                         script{
-                            def buildResultDoc = build job: 'compile_dds_devdoc', parameters: [string(name: 'branch', value: "dds_doc"), string(name: 'git_rep', value: "${doc_git_rep}")]
+                            def buildResultDoc = build job: 'compile_dds_doc', parameters: [string(name: 'branch', value: "dds_doc"), string(name: 'git_rep', value: "${doc_git_rep}")]
                             if (buildResultDoc.resultIsBetterOrEqualTo('SUCCESS')) {
                                 echo "Build doc succeeded!"
                                 // Save the job value for later use
@@ -141,7 +141,7 @@ pipeline {
                     sh "rm -rf release"
                     copyArtifacts filter: '**/*.run,**/*.run.sha256,**/VERSION,**/*-linux_x86_64.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_x86', selector: lastSuccessful(), target: 'release/x86_64'
                     copyArtifacts filter: '**/*.run,**/*.run.sha256,**/*-linux_aarch64.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_arm', selector: lastSuccessful(), target: 'release/aarch64'
-                    copyArtifacts filter: '**/*.pdf', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_devdoc', selector: lastSuccessful(), target: 'release/'
+                    copyArtifacts filter: '**/*.pdf', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_doc', selector: lastSuccessful(), target: 'release/'
                 }
             }
         }
