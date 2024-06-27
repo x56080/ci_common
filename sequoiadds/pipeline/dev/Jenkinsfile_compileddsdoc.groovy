@@ -8,8 +8,7 @@ pipeline {
     parameters{
         string(name: 'git_rep', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-doc.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: 'Select target architecture')
-        string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.3.0', description: '')
-        string(name: 'build_script_arguments', defaultValue: '--pdf --pdf-name-prefix sequoiadb-dds-manual', description: 'arguments pass to build.py')
+        string(name: 'docker_image', defaultValue: '192.168.20.106/sequoiadb/dds-doc-builder:0.2.0', description: '')
     }
 
     stages{
@@ -35,14 +34,14 @@ pipeline {
                 }
             }
             steps{
-            sh "python3 /usr/src/build.py /book ${build_script_arguments}"
+            sh "python3 /usr/src/build.py /book"
           }
         }
     }
 
     post{
       success{
-        archiveArtifacts allowEmptyArchive: true, artifacts: 'dds-doc/book/*.pdf'
+        archiveArtifacts allowEmptyArchive: true, artifacts: 'dds-doc/site/*.pdf'
       }
 
       failure {
