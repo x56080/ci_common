@@ -64,7 +64,7 @@ pipeline {
                 stage('compile doc'){
                     environment{
                         doc_git_rep = "http://gitlab.sequoiadb.com/sequoiadb/dds-doc.git"
-                        docker_image = "192.168.20.106/sequoiadb/dds-doc-builder:0.3.0"
+                        docker_image = "192.168.20.106/sequoiadb/dds-doc-builder:0.2.0"
                         
                     }
                     steps{
