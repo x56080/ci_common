@@ -26,7 +26,7 @@ pipeline {
                         }
                         build job: 'compile_sdbconnectors', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/sdbconnectors.git'), string(name: 'branch', value: "${branch}"), booleanParam(name: 'is_release', value: true), string(name: 'git_sha', value: "${params.git_sha}")]
                     }else if (params.component == "cc"){
-                        build job: 'dailybuild_clusterconfig', parameters: [string(name: 'git_sha', value: "${params.git_sha}")]
+                        build job: 'dailybuild_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.branch}")]
                     }else if (params.component == "m2s"){
                         build job: 'dailybuild_m2s', parameters: [string(name: 'git_sha', value: "${params.git_sha}")]
                     }else if (params.component == "sequoiashake"){
