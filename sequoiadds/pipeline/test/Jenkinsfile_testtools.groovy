@@ -30,7 +30,7 @@ pipeline {
       stage("build cc"){
          steps{
             // 编译CC
-            build job: 'dailybuild_clusterconfig', parameters: [string(name: 'git_sha', value: "${params.ccbranch}")]
+            build job: 'dailybuild_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.ccbranch}")]
          }
       }
       
