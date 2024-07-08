@@ -27,7 +27,7 @@ pipeline {
         stage('pull code') {
             steps {
                 cleanWs()
-                checkout scmGit(branches: [[name: "${params.dev_branch}"]], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'sac']], userRemoteConfigs: [[url: "${params.dev_repository}"]])
+                checkout scmGit(branches: [[name: "${params.dev_branch}"]], extensions: [checkoutOption(30),[$class: 'RelativeTargetDirectory', relativeTargetDir: 'sac']], userRemoteConfigs: [[url: "${params.dev_repository}"]])
             }
         }
         
