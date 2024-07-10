@@ -74,6 +74,7 @@ function get_dds_backup_agent_release_notes()
    version=$1
    source /etc/profile
    release_note="release.notes"
+   rm -f release_note*.txt
 
    tar -xzf *.tar.gz
    $(find ./ -name dds-backup-agent_${os_arch}) version >$release_note
