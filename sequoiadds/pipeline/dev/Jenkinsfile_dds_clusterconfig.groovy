@@ -11,8 +11,6 @@ pipeline {
         timestamps()
     }
 
-    triggers {cron('H 4 * * *')}
-
     stages {
         stage('pull code') {
             steps {
