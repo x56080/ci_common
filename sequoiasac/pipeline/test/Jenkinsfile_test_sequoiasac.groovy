@@ -35,7 +35,7 @@ pipeline {
             parallel{
                 stage("copy product package"){
                     steps {
-                        sh "cp -r ${PRODUCT_PACKAGE_LOCALPATH}/*.run ${TARGET_DIR}"
+                        sh "cp -r ${PRODUCT_PACKAGE_LOCALPATH}/* ${TARGET_DIR}"
                     }
                 }
                 
