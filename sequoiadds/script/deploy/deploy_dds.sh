@@ -113,9 +113,10 @@ else
 fi
 
 sed -i "s/\${PORT}/${port}/g" deployconfig.yml
-latest_tool_package=$(wget -qO- http://192.168.29.80:8080/view/daily_tools/job/dailybuild_clusterconfig/lastSuccessfulBuild/api/json | grep -oE 'sdb-dds-cc_v[0-9]+\.[0-9]+(\.[0-9]+)?(-[a-zA-Z0-9]+)?\.tar\.gz' | tail -n 1)
+# TODO 同步调整
+latest_tool_package=$(wget -qO- http://192.168.29.80:8080/view/daily_tools/job/compile_dds_clusterconfig/lastSuccessfulBuild/api/json | grep -oE 'sdb-dds-cc_v[0-9]+\.[0-9]+(\.[0-9]+)?(-[a-zA-Z0-9]+)?\.tar\.gz' | tail -n 1)
 # 下载最新版本的工具包
-wget "http://192.168.29.80:8080/view/daily_tools/job/dailybuild_clusterconfig/lastSuccessfulBuild/artifact/build/$latest_tool_package"
+wget "http://192.168.29.80:8080/view/daily_tools/job/compile_dds_clusterconfig/lastSuccessfulBuild/artifact/build/$latest_tool_package"
 test $? -ne 0 && echo "download cc failed!" && exit 1
 
 test -d cc && rm -rf cc
