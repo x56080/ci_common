@@ -30,7 +30,7 @@ pipeline {
       stage("build cc"){
          steps{
             // 编译CC
-            build job: 'dailybuild_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.ccbranch}")]
+            build job: 'compile_dds_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.ccbranch}")]
          }
       }
       
@@ -40,7 +40,7 @@ pipeline {
             // 从产品工程拉取安装包
             copyArtifacts filter: '**/*.run', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_arm', selector: lastSuccessful(), target: '.'
             // 从CC工程拉取工具包
-            copyArtifacts filter:'**/*.tar.gz',fingerprintArtifacts:true, flatten: true, projectName:'dailybuild_clusterconfig',selector:lastSuccessful(),target: '.'
+            copyArtifacts filter:'**/*.tar.gz',fingerprintArtifacts:true, flatten: true, projectName:'compile_dds_clusterconfig',selector:lastSuccessful(),target: '.'
          }
       }
       

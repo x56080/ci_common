@@ -26,7 +26,7 @@ pipeline {
                         }
                         build job: 'compile_sdbconnectors', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/sdbconnectors.git'), string(name: 'branch', value: "${branch}"), booleanParam(name: 'is_release', value: true), string(name: 'git_sha', value: "${params.git_sha}")]
                     }else if (params.component == "cc"){
-                        build job: 'dailybuild_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.branch}")]
+                        build job: 'compile_dds_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.branch}")]
                     }else if (params.component == "m2s"){
                         build job: 'dailybuild_m2s', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/m2s.git'), string(name: 'branch', value: "${params.branch}")]
                     }else if (params.component == "sequoiashake"){
@@ -47,7 +47,7 @@ pipeline {
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_sdbconnectors', selector: lastSuccessful()
                         sh './archiveversion.sh -p Connector'
                     }else if (params.component == "cc"){
-                        copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'dailybuild_clusterconfig', selector: lastSuccessful()
+                        copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_clusterconfig', selector: lastSuccessful()
                         sh './archiveversion.sh -p cc'
                         
                     }else if (params.component == "m2s"){
