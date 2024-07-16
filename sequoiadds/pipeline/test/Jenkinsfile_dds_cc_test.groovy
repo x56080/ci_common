@@ -22,7 +22,6 @@ pipeline {
         PROJECT_NAME="compile_dds_clusterconfig"
     }
     
-    
     stages {
         stage('pull code') {
             steps {
@@ -57,10 +56,8 @@ pipeline {
                     def dds_maj_ver = dds_version.substring(0,dds_version.lastIndexOf("."))
                     def upgrade_maj_ver = upgrade_version.substring(0,upgrade_version.lastIndexOf("."))
                     def cc_package = sh returnStdout: true, script: "basename \$(find ./ -name sdb-dds-cc*.tar.gz)"
-                    
-                    // TODO
-                    def execpara = " --mode deploy"
-                    execpara += " --tmp-path \"${WORKSPACE}/tmp\""
+
+                    def execpara = " --tmp-path \"${WORKSPACE}/tmp\""
                     execpara += " --dds-package \"${ARCHIVE_PATH}/SequoiaDDS/${dds_maj_ver}/${dds_version}/${host_arch}/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\""
                     execpara += " --upgrade-package \"${ARCHIVE_PATH}/SequoiaDDS/${upgrade_maj_ver}/${upgrade_version}/${host_arch}/sequoiadb-dds-${upgrade_version}-linux_${host_arch}-installer.run\""
                     execpara += " --cc-package \"http://192.168.29.80:8080/view/daily_tools/job/compile_dds_clusterconfig/lastSuccessfulBuild/artifact/build/${cc_package}\""
@@ -89,8 +86,7 @@ pipeline {
                                members = members + row[1];
                            }
                         }
-                        // TODO 本地测试无需发送邮件
-                        // emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${members}"
+                        emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${members}"
                     }
                 }
             }
