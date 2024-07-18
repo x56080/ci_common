@@ -69,7 +69,7 @@ pipeline {
                     }
                     steps{
                         script{
-                            def buildResultDoc = build job: 'compile_dds_doc', parameters: [string(name: 'branch', value: "dds_doc"), string(name: 'git_rep', value: "${doc_git_rep}")]
+                            def buildResultDoc = build job: 'compile_dds_doc', parameters: [string(name: 'branch', value: "main"), string(name: 'git_rep', value: "${doc_git_rep}")]
                             if (buildResultDoc.resultIsBetterOrEqualTo('SUCCESS')) {
                                 echo "Build doc succeeded!"
                                 // Save the job value for later use
