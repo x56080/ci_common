@@ -10,7 +10,7 @@ pipeline {
     parameters{
         string(name: 'branch', defaultValue: 'main', description: '')
         string(name: 'cc_version', defaultValue: '1.0.4', description: '')
-        string(name: 'dds_version', defaultValue: '3.4.14', description: '')
+        string(name: 'dds_version', defaultValue: '3.4.15', description: '')
         string(name: 'limit_memory_mb', defaultValue: '2048', description: '')
         string(name: 'cache_size_gb', defaultValue: '1', description: '')
         booleanParam(name: 'is_release', defaultValue: 'false', description: '')

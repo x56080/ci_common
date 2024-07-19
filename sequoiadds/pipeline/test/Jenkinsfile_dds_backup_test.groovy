@@ -7,7 +7,7 @@ pipeline {
         string(name: 'repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/dds-backup-driver.git', description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
         string(name: 'cc_version', defaultValue: '1.0.4', description: '')
-        string(name: 'dds_version', defaultValue: '3.4.14', description: '')
+        string(name: 'dds_version', defaultValue: '3.4.15', description: '')
         string(name: 'limit_memory_mb', defaultValue: '2048', description: '')
         string(name: 'cache_size_gb', defaultValue: '1', description: '')
     }
@@ -55,7 +55,7 @@ pipeline {
 
                     def execpara = " -DsshUsers=\"${TESTHOSTS}\""
                     execpara += " -DtmpDir=\"${WORKSPACE}/tmp\""
-                    execpara += " -DddsPackagePath=\"http://192.168.29.80:8080/view/daily_dds/job/${DDS_PROJECT_NAME}/lastSuccessfulBuild/artifact/build/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\"""
+                    execpara += " -DddsPackagePath=\"http://192.168.29.80:8080/view/daily_dds/job/${DDS_PROJECT_NAME}/lastSuccessfulBuild/artifact/build/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\""
                     execpara += " -DccPackagePath=\"${ARCHIVE_PATH}/SequoiaMisc/cc/${cc_maj_ver}/${cc_version}/sdb-dds-cc_v${cc_version}.tar.gz\""
                     execpara += " -DddsBackupDownloadUrl=\"http://192.168.29.80:8080/view/daily_dds/job/${PROJECT_NAME}/lastSuccessfulBuild/artifact/build/${backup_package_agent}\""
                     execpara += " -DtimeSyncCmd=\"chronyc -a makestep\""
