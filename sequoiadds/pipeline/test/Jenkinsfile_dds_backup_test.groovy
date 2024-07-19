@@ -52,7 +52,7 @@ pipeline {
                     
                     def cc_maj_ver = cc_version.substring(0,cc_version.lastIndexOf("."))
                     def backup_package_agent = sh returnStdout: true, script: "basename \$(find ./ -name *.tar.gz)"
-                    def dds_package = sh returnStdout: true, script: "basename \$(find ./ -name sequoiadb-dds-*-linux_${host_arch}-installer.run)"
+                    def dds_package = sh returnStdout: true, script: "basename \$(find ./ -name -linux_${host_arch}-installer.run)"
 
                     def execpara = " -DsshUsers=\"${TESTHOSTS}\""
                     execpara += " -DtmpDir=\"${WORKSPACE}/tmp\""
