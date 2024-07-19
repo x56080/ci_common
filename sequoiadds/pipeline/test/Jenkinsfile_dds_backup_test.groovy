@@ -55,7 +55,7 @@ pipeline {
 
                     def execpara = " -DsshUsers=\"${TESTHOSTS}\""
                     execpara += " -DtmpDir=\"${WORKSPACE}/tmp\""
-                    execpara += " -DddsPackagePath=\"http://192.168.29.80:8080/view/daily_dds/job/${DDS_PROJECT_NAME}/lastSuccessfulBuild/artifact/build/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\""
+                    execpara += " -DddsPackagePath=\"http://192.168.29.80:8080/view/daily_dds/job/${DDS_PROJECT_NAME}/lastSuccessfulBuild/artifact/build_run_dds/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\""
                     execpara += " -DccPackagePath=\"${ARCHIVE_PATH}/SequoiaMisc/cc/${cc_maj_ver}/${cc_version}/sdb-dds-cc_v${cc_version}.tar.gz\""
                     execpara += " -DddsBackupDownloadUrl=\"http://192.168.29.80:8080/view/daily_dds/job/${PROJECT_NAME}/lastSuccessfulBuild/artifact/build/${backup_package_agent}\""
                     execpara += " -DtimeSyncCmd=\"chronyc -a makestep\""
