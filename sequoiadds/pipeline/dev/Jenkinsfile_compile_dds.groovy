@@ -45,7 +45,7 @@ pipeline {
             post {
                 success {
                     // 只有在构建成功时执行以下归档操作
-                    archiveArtifacts artifacts: 'dds/release/*.tar.gz', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'build_run_dds/release/*.tar.gz', allowEmptyArchive: true
                 }
             }
             
@@ -61,11 +61,11 @@ pipeline {
                     cleanWs()
                     // Get some code from a GitHub repository
                     git 'http://gitlab.sequoiadb.com/sequoiadb/build_run.git'
-                    unarchive mapping: ['dds/release/*.tar.gz':'./']
+                    unarchive mapping: ['build_run_dds/release/*.tar.gz':'./']
                     if(params.BUILD_POC){
-                        sh "bash callbuildpackage.sh -p sequoiadds -t dds/release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s --poc"
+                        sh "bash callbuildpackage.sh -p sequoiadds -t build_run_dds/release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s --poc"
                     }else{
-                        sh "bash callbuildpackage.sh -p sequoiadds -t dds/release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s"
+                        sh "bash callbuildpackage.sh -p sequoiadds -t build_run_dds/release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s"
                     }
                 }
             }
