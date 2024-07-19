@@ -28,7 +28,7 @@ pipeline {
                     }else if (params.component == "cc"){
                         build job: 'compile_dds_clusterconfig', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/cluster-config.git'), string(name: 'branch', value: "${params.branch}")]
                     }else if (params.component == "m2s"){
-                        build job: 'dailybuild_m2s', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/m2s.git'), string(name: 'branch', value: "${params.branch}")]
+                        build job: 'compile_dds_m2s', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/m2s.git'), string(name: 'branch', value: "${params.branch}")]
                     }else if (params.component == "sequoiashake"){
                         build job: 'dailybuild_sequoiashake', parameters: [string(name: 'git_sha', value: '')]
                     }else if(params.component == "dds_java"){
@@ -51,7 +51,7 @@ pipeline {
                         sh './archiveversion.sh -p cc'
                         
                     }else if (params.component == "m2s"){
-                        copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'dailybuild_m2s', selector: lastSuccessful()
+                        copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_m2s', selector: lastSuccessful()
                         sh './archiveversion.sh -p m2s'
                         
                     }else if (params.component == "sequoiashake"){
