@@ -36,16 +36,16 @@ pipeline {
                     sh "source /opt/mongodbtoolchain/py3env/bin/activate;cd dds; scl enable devtoolset-9 'python3 build.py install-devcore --separate-debug -j $jobs';deactivate"
                     sh "cd dds; git fetch --tags $git_repository"
                     if(params.BUILD_POC){
-                        sh "cd dds; python3 package.py --output-path ./release --tools-path ../dds_tools_archive --pigz --pack-dbg --poc"
+                        sh "cd dds; python3 package.py --output-path ../release --tools-path ../dds_tools_archive --pigz --pack-dbg --poc"
                     }else{
-                        sh "cd dds; python3 package.py --output-path ./release --tools-path ../dds_tools_archive --pigz --pack-dbg"
+                        sh "cd dds; python3 package.py --output-path ../release --tools-path ../dds_tools_archive --pigz --pack-dbg"
                     }
                 }
             }
             post {
                 success {
                     // 只有在构建成功时执行以下归档操作
-                    archiveArtifacts artifacts: 'build_run_dds/release/*.tar.gz', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'release/*.tar.gz', allowEmptyArchive: true
                 }
             }
             
@@ -60,21 +60,21 @@ pipeline {
                 script {
                     cleanWs()
                     // Get some code from a GitHub repository
-                    git 'http://gitlab.sequoiadb.com/sequoiadb/build_run.git'
-                    unarchive mapping: ['build_run_dds/release/*.tar.gz':'./']
+                    checkout scmGit(branches: [[name: "master"]],  extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'build_run_dds']], userRemoteConfigs: [[url: 'http://gitlab.sequoiadb.com/sequoiadb/build_run.git']])
+                    unarchive mapping: ['release/*.tar.gz':'./']
                     if(params.BUILD_POC){
-                        sh "bash callbuildpackage.sh -p sequoiadds -t build_run_dds/release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s --poc"
+                        sh "cd build_run_dds; bash callbuildpackage.sh -p sequoiadds -t ../release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s --poc"
                     }else{
-                        sh "bash callbuildpackage.sh -p sequoiadds -t build_run_dds/release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s"
+                        sh "cd build_run_dds; bash callbuildpackage.sh -p sequoiadds -t ../release/sequoiadb-dds.tar.gz -u ${git_repository} -b ${branch} -a ${host_arch} -s"
                     }
                 }
             }
             
             post {
                 success {
-                    archiveArtifacts 'release/*.run'
-                    archiveArtifacts 'release/sequoiadds/VERSION'
-                    archiveArtifacts 'release/*.run.sha256'
+                    archiveArtifacts 'build_run_dds/release/*.run'
+                    archiveArtifacts 'build_run_dds/release/sequoiadds/VERSION'
+                    archiveArtifacts 'build_run_dds/release/*.run.sha256'
                 }
                 
                 failure {
