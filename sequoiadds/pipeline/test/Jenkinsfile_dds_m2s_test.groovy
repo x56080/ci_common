@@ -1,0 +1,95 @@
+pipeline {
+    agent {
+        label 'test_dds_tool'
+    }
+    
+    parameters {
+        string(name: 'repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/m2s.git', description: '')
+        string(name: 'branch', defaultValue: 'main', description: '')
+        string(name: 'dds_version', defaultValue: '3.4.14', description: '')
+        string(name: 'cc_version', defaultValue: '1.1.0', description: '')
+    }
+    
+    options {
+        // disableConcurrentBuilds()
+        timestamps()
+    }
+    
+    environment {
+        ARCHIVE_PATH="/sequoiadb/7.版本归档_NEW/"
+        // X86_TESTHOSTS="root:Sdb@123123:192.168.29.101;root:Sdb@123123:192.168.29.26"
+        ARM_TESTHOSTS="root:Sdb@123123:192.168.24.27;root:Sdb@123123:192.168.24.28"
+        PROJECT_NAME="compile_dds_m2s"
+    }
+    
+    stages {
+        stage('pull code') {
+            steps {
+                cleanWs()
+                checkout scmGit(branches: [[name: "${params.branch}"]],  extensions: [], userRemoteConfigs: [[url: "${params.repository}"]])
+                copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: "${PROJECT_NAME}", selector: lastSuccessful()
+            }
+        }
+        
+        stage('exec test') {
+            steps {
+                // general testcase
+                script{
+                    def host_arch = sh returnStdout: true, script: "uname -p"
+                    host_arch = host_arch.trim()
+                    def TESTHOSTS = ""
+                    def DDS_PROJECT_NAME=""
+                    def script_path = sh returnStdout: true, script: "pwd"
+                    script_path = script_path.split("\n")[0]
+
+                    // TODO
+                    // if (host_arch == "x86_64"){
+                    //     TESTHOSTS=X86_TESTHOSTS
+                    //     DDS_PROJECT_NAME = "compile_dds_x86"
+                    // }else{
+                    //     TESTHOSTS=ARM_TESTHOSTS
+                    //     DDS_PROJECT_NAME = "compile_dds_arm"
+                    // }
+                    TESTHOSTS=ARM_TESTHOSTS
+                    DDS_PROJECT_NAME = "compile_dds_arm"
+                    
+                    def dds_maj_ver = dds_version.substring(0,dds_version.lastIndexOf("."))
+                    def cc_maj_ver = cc_version.substring(0,cc_version.lastIndexOf("."))
+                    def m2s_package = sh returnStdout: true, script: "basename \$(find ./ -name m2s*.tar.gz)"
+
+                    def execpara = " --tmp-path \"${WORKSPACE}/tmp\""
+                    execpara += " --dds-package \"${ARCHIVE_PATH}/SequoiaDDS/${dds_maj_ver}/${dds_version}/${host_arch}/sequoiadb-dds-${dds_version}-linux_${host_arch}-installer.run\""
+                    execpara += " --cc-package=\"${ARCHIVE_PATH}/SequoiaMisc/cc/${cc_maj_ver}/${cc_version}/sdb-dds-cc_v${cc_version}.tar.gz\""
+                    execpara += " --m2s-package \"http://192.168.29.80:8080/view/daily_tools/job/compile_dds_m2s/lastSuccessfulBuild/artifact/build/${m2s_package}\""
+                    execpara += " --ssh-user \"${TESTHOSTS}\""
+
+                    def exec_file = "${script_path}/testcase/run.sh"
+                    sh "${exec_file} ${execpara}"
+                }
+            }
+            
+            post {
+                success{
+                    junit skipOldReports: true, stdioRetention: '', testResults: '**/junitreports/*.xml'
+                }
+                failure {
+                    script {
+                        checkout scmGit(branches:[[name: "main"]],extensions:[[$class: 'RelativeTargetDirectory', relativeTargetDir: 'misc']],userRemoteConfigs:[[url:"http://gitlab.sequoiadb.com/sequoiadb/ci/ci_common.git"]])
+                        def csvContent=readCSV file: 'misc/shared_utils/config/dev_groups.csv'
+                        def members=""
+                        csvContent.each { row ->
+                           def group = row[0]
+                           if (group == "dds_group" || group == "ci_group"){
+                               if ( members != "" ){
+                                  members = members + ","
+                               }
+                               members = members + row[1];
+                           }
+                        }
+                        //emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${members}"
+                    }
+                }
+            }
+        }
+    }
+}
