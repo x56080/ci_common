@@ -72,11 +72,9 @@ function get_m2s_release_notes()
 function archive_m2s()
 {
    version=$1
-   mkdir -p $version/x86_64
-   mkdir -p $version/aarch64
    get_m2s_release_notes $version
-   cp $(find ./ -name *_linux_x86_64.tar.gz) $version/x86_64
-   cp $(find ./ -name *_linux_aarch64.tar.gz) $version/aarch64
+   mkdir -p $version
+   cp *.tar.gz $version
    cp *.txt $version
 }
 
