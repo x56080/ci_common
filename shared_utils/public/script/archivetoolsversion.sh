@@ -46,14 +46,27 @@ function archive_cc()
 
 function get_m2s_release_notes()
 {
-  release_note="release.notes"
-  tar -xzf $(find ./ -name *_linux_x86_64.tar.gz)
-  $(find . -type f -name m2s-analyzer) --version 1>>$release_note 2>&1
-  echo "" >>$release_note
-  $(find . -type f -name m2s-collector) --version 1>>$release_note 2>&1
-  echo "" >>$release_note
-  $(find . -type f -name sniffer.sh) --version 1>>$release_note 2>&1
-  echo "" >>$release_note
+   version=$1
+   source /etc/profile # 为了使用新版git
+   release_note="release.notes"
+   rm -f release_note*.txt
+
+   tar -xzf *.tar.gz
+   $(find ./ -name m2s) --version >>$release_note
+   echo "" >>$release_note
+   echo "m2s 是用于将 MongoDB 迁移至 SequoiaDB(DDS) 的工具" >>$release_note
+   echo "" >>$release_note
+   echo "## m2s ${version} 版本说明" >>$release_note
+   test -d m2s && rm -rf m2s
+   git clone http://gitlab.sequoiadb.com/sequoiadb/m2s.git
+   test $? -ne 0 && echo "http://gitlab.sequoiadb.com/sequoiadb/m2s.git" && exit 1
+   cd m2s
+   tag=$(git describe --tags --abbrev=0)
+   msg=$(git tag -l --format='%(contents)' $tag)
+   cd ..
+   echo "">>$release_note
+   echo "$msg">>$release_note
+   iconv -f utf-8 -t gb18030 $release_note > release_note_${version}.txt
 }
 
 function archive_m2s()
@@ -61,10 +74,10 @@ function archive_m2s()
    version=$1
    mkdir -p $version/x86_64
    mkdir -p $version/aarch64
-   get_m2s_release_notes
+   get_m2s_release_notes $version
    cp $(find ./ -name *_linux_x86_64.tar.gz) $version/x86_64
    cp $(find ./ -name *_linux_aarch64.tar.gz) $version/aarch64
-   cp release.notes $version
+   cp *.txt $version
 }
 
 function get_dds_backup_agent_release_notes()
