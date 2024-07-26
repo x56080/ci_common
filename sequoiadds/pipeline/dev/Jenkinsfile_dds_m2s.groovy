@@ -32,7 +32,7 @@ pipeline {
     
     post{
         success{
-            archiveArtifacts allowEmptyArchive: true, artifacts: '**/*.tar.gz', followSymlinks: false
+            archiveArtifacts allowEmptyArchive: true, artifacts: '**/m2s_*.tar.gz', followSymlinks: false
         }
         failure {
          script{
