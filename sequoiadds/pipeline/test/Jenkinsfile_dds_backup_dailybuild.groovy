@@ -74,10 +74,10 @@ pipeline {
                             string(name: 'cc_version', value: "${params.cc_version}"),
                             string(name: 'limit_memory_mb', value: "${params.limit_memory_mb}"),
                             string(name: 'cache_size_gb', value: "${params.cache_size_gb}"),
-                            string(name: 'minio_endpoint_url', value: "${params.minio_endpoint_url}")
-                            string(name: 'minio_access_key_id', value: "${params.minio_access_key_id}")
-                            string(name: 'minio_secret_access_key', value: "${params.minio_secret_access_key}")
-                            string(name: 'minio_region', value: "${params.minio_region}")
+                            string(name: 'minio_endpoint_url', value: "${params.minio_endpoint_url}"),
+                            string(name: 'minio_access_key_id', value: "${params.minio_access_key_id}"),
+                            string(name: 'minio_secret_access_key', value: "${params.minio_secret_access_key}"),
+                            string(name: 'minio_region', value: "${params.minio_region}"),
                         ],
                         wait: true
                     }
