@@ -14,6 +14,10 @@ pipeline {
         string(name: 'limit_memory_mb', defaultValue: '2048', description: '')
         string(name: 'cache_size_gb', defaultValue: '1', description: '')
         booleanParam(name: 'is_release', defaultValue: 'false', description: '')
+        string(name: 'minio_endpoint_url', defaultValue: 'http://192.168.29.28:9000/', description: '')
+        string(name: 'minio_access_key_id', defaultValue: 'JLrS1PuMjhoRma7tXi4O', description: '')
+        string(name: 'minio_secret_access_key', defaultValue: 'i4vucuO8my7VQTkLSb5aUDmOK629tGUILy3i5NeU', description: '')
+        string(name: 'minio_region', defaultValue: 'us-east-1', description: '')
     }
     
     stages {
