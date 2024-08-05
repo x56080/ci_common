@@ -1,17 +1,16 @@
 pipeline {
     agent {label 'master'}
-    
+
     options {
         disableConcurrentBuilds()
         timestamps()
     }
 
     parameters{
-        choice(name: 'component', choices: ['connector','cc','m2s','sequoiashake','dds_java'], description: '')
+        choice(name: 'component', choices: ['connector','cc','m2s','sequoiashake','dds_java','dds_diagnostic'], description: '')
         string(name: 'branch', defaultValue: 'main', description: '')
         string(name: 'git_sha', defaultValue: '', description: '')
         string(name: 'version', defaultValue: '', description: '')
-        
     }
 
     stages {
@@ -33,11 +32,13 @@ pipeline {
                         build job: 'dailybuild_sequoiashake', parameters: [string(name: 'git_sha', value: '')]
                     }else if(params.component == "dds_java"){
                         build job: 'compile_dds_driver_java', parameters: [string(name: 'BRANCH', value: "${params.branch}"), string(name: 'GIT_SHA', value: "${params.git_sha}"), string(name: 'GIT_TAG', value: ''), string(name: 'COMPILE_TYPE', value: 'package')]
+                    }else if(params.component == "dds_diagnostic"){
+                        build job: 'compile_dds_diagnostic', parameters: [string(name: 'git_repository', value: 'http://gitlab.sequoiadb.com/sequoiadb/dds-diagnostic.git'), string(name: 'branch', value: "${params.branch}")]
                     }
                 }
             }
         }
-        
+
         stage('archive') {
             steps {
                 script{
@@ -49,19 +50,18 @@ pipeline {
                     }else if (params.component == "cc"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_clusterconfig', selector: lastSuccessful()
                         sh './archiveversion.sh -p cc'
-                        
                     }else if (params.component == "m2s"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_m2s', selector: lastSuccessful()
                         sh './archiveversion.sh -p m2s'
-                        
                     }else if (params.component == "sequoiashake"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'dailybuild_sequoiashake', selector: lastSuccessful()
                         sh "./archiveversion.sh -p sequoiashake -v ${params.version}"
-                        
                     }else if(params.component == "dds_java"){
                         copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_driver_java', selector: lastSuccessful()
                         sh "./archiveversion.sh -p dds_java"
-                        
+                    }else if (params.component == "dds_diagnostic"){
+                        copyArtifacts filter: '**/*.tar.gz', fingerprintArtifacts: true, flatten: true, projectName: 'compile_dds_diagnostic', selector: lastSuccessful()
+                        sh './archiveversion.sh -p dds_diagnostic'
                     }
                 }
             }
