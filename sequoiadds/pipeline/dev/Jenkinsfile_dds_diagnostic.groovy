@@ -30,7 +30,7 @@ pipeline {
 
     post{
         success{
-            archiveArtifacts allowEmptyArchive: true, artifacts: '**/dds-diagnostic_*.tar.gz', followSymlinks: false
+            archiveArtifacts allowEmptyArchive: true, artifacts: '**/*.tar.gz', followSymlinks: false
         }
         failure {
          script{
