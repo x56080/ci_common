@@ -117,6 +117,38 @@ function archive_dds_backup_agent()
    cp *.txt $version
 }
 
+function get_diagnostic_release_notes()
+{
+   version=$1
+   source /etc/profile # 为了使用新版git
+   release_note="release.notes"
+   tar -xzf *.tar.gz
+   $(find ./ -name diagnostic-collector) --version >>$release_note
+   echo "" >>$release_note
+   echo "sdb-dds-diagnostic 是用于收集、分析 SequoiaDB(DDS) 诊断信息的工具" >>$release_note
+   echo "" >>$release_note
+   echo "## sdb-dds-diagnostic ${version} 版本说明" >>$release_note
+   test -d dds-diagnostic&& rm -rf dds-diagnostic
+   git clone http://gitlab.sequoiadb.com/sequoiadb/dds-diagnostic.git
+   test $? -ne 0 && echo "http://gitlab.sequoiadb.com/sequoiadb/dds-diagnostic.git" && exit 1
+   cd dds-diagnostic
+   tag=$(git describe --tags --abbrev=0)
+   msg=$(git tag -l --format='%(contents)' $tag)
+   cd ..
+   echo "">>$release_note
+   echo "$msg">>$release_note
+   iconv -f utf-8 -t gb18030 $release_note > release_note_${version}.txt
+}
+
+function archive_diagnostic()
+{
+   version=$1
+   get_diagnostic_release_notes $version
+   mkdir -p $version
+   cp *.tar.gz $version
+   cp *.txt $version
+}
+
 declare -A mapdestDir
 mapdestDir[cc]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/cc/"
 mapdestDir[m2s]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/m2s/"
@@ -124,6 +156,7 @@ mapdestDir[sequoiashake]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/sequoiashake
 mapdestDir[Connector]="/sequoiadb/7.版本归档_NEW/Connector/"
 mapdestDir[dds_java]="/sequoiadb/7.版本归档_NEW/SequoiaDDS/driver/Java/"
 mapdestDir[dds_backup_agent]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/dds_backup_agent/"
+mapdestDir[dds_diagnostic]="/sequoiadb/7.版本归档_NEW/SequoiaMisc/dds_diagnostic/"
 version=""
 opts=$(getopt -o p:v:h --long product:version:,help -n 'parse-options' -- "$@")
 if [ $? -ne 0 ]; then
@@ -173,6 +206,8 @@ elif [ "$product" = "m2s" ];then
    archive_m2s $version
 elif [ "$product" = "dds_backup_agent" ];then
    archive_dds_backup_agent $version
+elif [ "$product" = "dds_diagnostic" ];then
+   archive_diagnostic $version
 else
    mkdir -p $version
    cp *.tar.gz $version
