@@ -122,7 +122,7 @@ function get_diagnostic_release_notes()
    version=$1
    source /etc/profile # 为了使用新版git
    release_note="release.notes"
-   tar -xzf *.tar.gz
+   tar -xzf dds-diagnostic-collector*.tar.gz
    $(find ./ -name diagnostic-collector) --version >>$release_note
    echo "" >>$release_note
    echo "sdb-dds-diagnostic 是用于收集、分析 SequoiaDB(DDS) 诊断信息的工具" >>$release_note
