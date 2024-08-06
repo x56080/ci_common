@@ -218,7 +218,7 @@ major_version=$(echo $version | grep -oE '^[0-9]+\.[0-9]+')
 destDir="${destDir}${major_version}"
 
 if [ ! -d "${destDir}" ];then
-   mkdir -p "${destDir}"
+   sudo mkdir -p "${destDir}"
 fi
 
 sudo mv "$version" "$destDir"
