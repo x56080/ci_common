@@ -12,6 +12,7 @@ $productMap = @{
     "SequoiaSQL" = "sequoiasql/mysql"
     "m2s" = "tools/m2s"
 	"cc" = "tools/dds-cc"
+    "dds_diagnostic" = "tools/dds-diagnostic"
     # 添加更多产品名和对应目录的映射
 }
 

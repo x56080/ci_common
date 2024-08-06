@@ -35,8 +35,8 @@ Write-Host "Source path : $sourcePath"
 #$targetPath = "C:\upx\public"
 
 
-# 如果 productName 为 "cc" 或 "m2s"，在产品名前加一层 "misc" 目录
-if ($productName -eq "cc" -or $productName -eq "m2s") {
+# 如果 productName 为 "cc"、"m2s"、"dds_diagnostic"，在产品名前加一层 "misc" 目录
+if ($productName -eq "cc" -or $productName -eq "m2s" -or $productName -eq "dds_diagnostic") {
     $productName = "SequoiaMisc\$productName"
 }
 
