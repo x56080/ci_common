@@ -1,7 +1,7 @@
 pipeline {
     agent {label 'master'}
     parameters {
-        choice(name: 'BRANCH', choices: ['master','3.4','3.6','4.0','4.0.1','4.2','4.2.1'], description: '')
+        choice(name: 'BRANCH', choices: ['master','5.6'], description: '')
         string(name: 'GIT_SHA', defaultValue: '', description: '')
         booleanParam(name: 'SKIP_COMPILE', defaultValue: false, description: '')
         booleanParam(name: 'SKIP_TEST', defaultValue: false, description: '')
