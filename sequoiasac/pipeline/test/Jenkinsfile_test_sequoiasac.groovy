@@ -44,11 +44,11 @@ pipeline {
                             def runpackage="**/sequoiasac*-linux_x86_64-enterprise-installer.run"
                             def tarpackage="**/sequoiasac*-linux_x86_64-enterprise.tar.gz"
                             if (params.BuildId != ""){
-                                copyArtifacts filter: "${runpackage}", fingerprintArtifacts: true, flatten: true, projectName: 'compile_master_sequoiasac', selector: specific("${params.BuildId}"), target: "${TARGET_DIR}"
-                                copyArtifacts filter: "${tarpackage}", fingerprintArtifacts: true, flatten: true, projectName: 'compile_master_sequoiasac', selector: specific("${params.BuildId}"), target: "${TARGET_DIR}"
+                                copyArtifacts filter: "${runpackage}", fingerprintArtifacts: true, flatten: true, projectName: "${params.ProjectName}", selector: specific("${params.BuildId}"), target: "${TARGET_DIR}"
+                                copyArtifacts filter: "${tarpackage}", fingerprintArtifacts: true, flatten: true, projectName: "${params.ProjectName}", selector: specific("${params.BuildId}"), target: "${TARGET_DIR}"
                             }else{
-                                copyArtifacts filter: "${runpackage}", fingerprintArtifacts: true, flatten: true, projectName: 'compile_master_sequoiasac', selector: lastSuccessful(), target: "${TARGET_DIR}"
-                                copyArtifacts filter: "${tarpackage}", fingerprintArtifacts: true, flatten: true, projectName: 'compile_master_sequoiasac', selector: lastSuccessful(), target: "${TARGET_DIR}"
+                                copyArtifacts filter: "${runpackage}", fingerprintArtifacts: true, flatten: true, projectName: "${params.ProjectName}", selector: lastSuccessful(), target: "${TARGET_DIR}"
+                                copyArtifacts filter: "${tarpackage}", fingerprintArtifacts: true, flatten: true, projectName: "${params.ProjectName}", selector: lastSuccessful(), target: "${TARGET_DIR}"
                             }
                         }
                         
