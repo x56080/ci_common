@@ -10,13 +10,7 @@ pipeline {
         
         stage('test') {
             steps {
-                script {
-                    if(params.BRANCH == 'master') {
-                        build job: 'test_master_sequoiasac', parameters: [string(name: 'dev_repository', value: "${params.dev_repository}"), string(name: 'dev_branch', value: "${params.dev_branch}"), string(name: 'test_repository', value: "${params.test_repository}"), string(name: 'test_branch', value: "${params.test_branch}"), string(name: 'testtype', value: "${params.testtype}"), string(name: 'host_arch', value: "${params.host_arch}")], wait: true
-                    } else if (params.BRANCH == '5.6') {
-                        build job: 'test_5.6_sequoiasac', parameters: [string(name: 'dev_repository', value: "${params.dev_repository}"), string(name: 'dev_branch', value: "${params.dev_branch}"), string(name: 'test_repository', value: "${params.test_repository}"), string(name: 'test_branch', value: "${params.test_branch}"), string(name: 'testtype', value: "${params.testtype}"), string(name: 'host_arch', value: "${params.host_arch}")], wait: true
-                    }
-                }
+                build job: 'test_master_sequoiasac', parameters: [string(name: 'dev_repository', value: "${params.dev_repository}"), string(name: 'dev_branch', value: "${params.dev_branch}"), string(name: 'test_repository', value: "${params.test_repository}"), string(name: 'test_branch', value: "${params.test_branch}"), string(name: 'testtype', value: "${params.testtype}"), string(name: 'host_arch', value: "${params.host_arch}")], wait: true
             }
         }
     }
