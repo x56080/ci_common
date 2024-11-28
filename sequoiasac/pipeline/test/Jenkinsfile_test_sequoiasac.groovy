@@ -2,7 +2,8 @@ pipeline {
     agent {label 'test_sac'}
     parameters {
         string(name: 'dev_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/sac.git', description: '')
-        string(name: 'test_repository', defaultValue: 'http://gitlab.sequoiadb.com/test/sac-auto-test', description: '')
+        string(name: 'test_repository', defaultValue: 'http://gitlab.sequoiadb.com/test/sac-auto-test', description: '')        
+        string(name: 'test_branch', defaultValue: '', description: '')
         choice(name: 'host_arch', choices: ['x86_64','aarch64'], description: 'Select target architecture')
         choice(name: 'testtype', choices: ['runbase','runtest'], description: 'Select test type')
     }
