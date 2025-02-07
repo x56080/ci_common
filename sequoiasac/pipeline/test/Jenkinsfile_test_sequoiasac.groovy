@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'test_sac'}
+    agent {label 'test_sac_master'}
     parameters {
         string(name: 'dev_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/sac.git', description: '')
         string(name: 'test_repository', defaultValue: 'http://gitlab.sequoiadb.com/test/sac-auto-test', description: '')        
