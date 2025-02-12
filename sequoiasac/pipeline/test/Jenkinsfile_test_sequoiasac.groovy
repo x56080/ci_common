@@ -94,15 +94,15 @@ pipeline {
     post{
         success{
             script{
-                def htmlFile = "sac-auto-testcase/testcases/story/Cypress/mochawesome-report/_all-test-result.html"
+                def htmlFile = "sac-auto-testcase/mochawesome-report/mochawesome.html"
                 def ret = sh returnStdout: true, script: "grep '失败用例:' $htmlFile |sed 's/<[^>]*>//g'|awk -F ':' '{print \$2}'"
                 if (ret != "0"){
                     currentBuild.result = "UNSTABLE"
-                    def src_basedir="sac-auto-testcase/testcases/story/Cypress"
-                    def backup_dir="${src_basedir}/backup_screenshots"
+                    //def src_basedir="sac-auto-testcase/testcases/story/Cypress"
+                    //def backup_dir="${src_basedir}/backup_screenshots"
                     
-                    sh "mkdir -p $backup_dir; cp -r ${src_basedir}/cypress-visual-screenshots/diff ${backup_dir}; cp -r ${src_basedir}/cypress/screenshots/ ${backup_dir}; cp -r ${src_basedir}/cypress/downloads ${backup_dir}"
-                    tar archive: true, compress: true, defaultExcludes: false, dir: "${backup_dir}", exclude: '', file: 'backup_screenshots.tar.gz', glob: '', overwrite: true
+                    //sh "mkdir -p $backup_dir; cp -r ${src_basedir}/cypress-visual-screenshots/diff ${backup_dir}; cp -r ${src_basedir}/cypress/screenshots/ //${backup_dir}; cp -r ${src_basedir}/cypress/downloads ${backup_dir}"
+                    //tar archive: true, compress: true, defaultExcludes: false, dir: "${backup_dir}", exclude: '', file: 'backup_screenshots.tar.gz', glob: '', //overwrite: true
                 }
             }
         }
