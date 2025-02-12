@@ -85,8 +85,8 @@ pipeline {
             steps {
                 script{
                     //def reportdir="sac-auto-testcase/testcases/story/Cypress/mochawesome-report/"
-					def reportdir="sac-auto-testcase/mochawesome-report/"
-					def files="mochawesome.html"
+			def reportdir="sac-auto-testcase/mochawesome-report/"
+			def files="mochawesome.html"
                     //def files="_all-test-result.html"
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${reportdir}", reportFiles: "${files}", reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
