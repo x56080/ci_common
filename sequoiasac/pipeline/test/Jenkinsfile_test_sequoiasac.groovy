@@ -17,8 +17,7 @@ pipeline {
 
     environment {
         PRODUCT_PACKAGE_LOCALPATH="/data/product_package"
-        //TEST_HOSTLIST="192.168.29.24,192.168.29.104,192.168.29.154,192.168.29.98,192.168.29.21,192.168.29.159,192.168.29.160,192.168.29.161"
-	TEST_HOSTLIST="192.168.29.162,192.168.29.163,192.168.29.164,192.168.29.165,192.168.29.166"
+        TEST_HOSTLIST="192.168.29.162,192.168.29.163,192.168.29.164,192.168.29.165,192.168.29.166"
         TARGET_DIR="sac/localbuild/package"
     }
 
@@ -84,10 +83,8 @@ pipeline {
         stage('parse test report') {
             steps {
                 script{
-                    //def reportdir="sac-auto-testcase/testcases/story/Cypress/mochawesome-report/"
-			def reportdir="sac-auto-testcase/mochawesome-report/"
-			def files="mochawesome.html"
-                    //def files="_all-test-result.html"
+                    def reportdir="sac-auto-testcase/mochawesome-report/"
+                    def files="mochawesome.html"
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: "${reportdir}", reportFiles: "${files}", reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
