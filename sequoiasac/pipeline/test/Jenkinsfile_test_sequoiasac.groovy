@@ -96,8 +96,8 @@ pipeline {
             script{
                 def htmlFile = "sac-auto-testcase/mochawesome-report/mochawesome.html"
                 def ret = sh returnStdout: true, script: "grep -o 'failures&quot;:[0-9]\\+' $htmlFile |sed 's/.*://'"
-				ret = ret.trim()
-				println "ret value: ${ret}"
+       ret = ret.trim()
+       println "ret value: ${ret}"
                 if (ret != 0 ){
                     currentBuild.result = "UNSTABLE"
                     //def src_basedir="sac-auto-testcase/testcases/story/Cypress"
