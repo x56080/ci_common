@@ -35,13 +35,6 @@ pipeline {
                 }
             }
         }
-        stage('Approval') {
-            steps {
-                timeout(time: 600, unit: 'SECONDS') {
-                    input message: "是否发布${params.product} ${params.version}版本？", ok: 'yes', submitter: 'wangwenjing'
-                }
-            }
-        }
         
         stage('upload version') {
             steps {
