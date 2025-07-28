@@ -1,7 +1,7 @@
 pipeline {
     agent {label 'test_sac_master'}
     parameters {
-        string(name: 'dev_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/sac.git', description: '')
+        string(name: 'dev_repository', defaultValue: 'http://gitlab.sequoiadb.com/sequoiadb/sac-compile.git', description: '')
         string(name: 'test_repository', defaultValue: 'http://gitlab.sequoiadb.com/test/sac-auto-test', description: '')        
         string(name: 'test_branch', defaultValue: "${params.test_branch}", description: '')
         choice(name: 'host_arch', choices: ['x86_64','aarch64'], description: 'Select target architecture')
